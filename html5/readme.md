@@ -9,3 +9,12 @@ function animation() {
     
 }
 animation();
+
+- canvas 是画布
+绘制API 画布默认大小？
+canvas.style.width 标准的 100vw
+canvas.width html 属性 不接受单位，只接受数值
+canvas,getContext('2d');
+ctx.fillstyle = 'red';
+ctx.fillText(2,100,100)
+requestAnimation + clearRect();
