@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" style="font-size: 100px">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,118 +7,54 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
+        /* css选择器 */
+        .body {
+            background: url("./maoshenti.png");
+            width: 117px;
+            height: 201px;
+            position: absolute;
+            /* 相对于body的宽高 */
+            left: 50%;
+            top: 50%;
+            transform: translate3d(-50%, -50%, 0);
         }
 
-        body {
-            /* css继承父样式 */
-            font-size: 0.28rem;
-            line-height: 1.5;
-        }
-
-        img {
-            max-width: 100%;
-            /* 不要超过父元素 */
-        }
-
-        #map {
-            width: 100vw;
-            height: 100vh;
-        }
-
-        .poi-item-wrapper {
-            background-color: #fff;
-            padding: 0.24rem 0 0 0.3rem;
-            /* rem相对单位需在第二行 <html lang="en" style="font-size: 100px"> */
-            border-bottom: 1
-        }
-
-        .poi-item-wrapper .poi-info-wrapper {
-            display: flex;
-        }
-
-        .poi-item-wrapper .image-wrapper {
+        .weiba {
             position: relative;
-            margin-top: 0.05rem;
-            width: 1.6rem;
-            height: 1.61rem;
+            width: 64px;
+            height: 194px;
+            background: url("./maowei.png");
+            top: -182px;
+            animation: ani 3s ease-in-out infinite alternate;
+            transform-origin: 100% 100%;
         }
 
-        .poi-item-wrapper .poi-info {
-            margin-top: 0.18rem;
-            flex: 1;
+        @keyframes ani {
+            100% {
+                transform: rotate(-5deg);
+            }
+
         }
+
+
+
+        /* 水平居中 垂直居中 */
+        /* absolute 绝对定位，相对于父级第一个设置了定位属性的元素来定位，如果没有相对于body */
     </style>
-
 </head>
 
+
 <body>
-    <!-- html +css -->
-    <!-- 附近的商家 info-->
-    <div class="shop-list">
-        <div class="poi-item-wrapper">
-            <div class="poi-info-wrapper">
-                <div class="image-wrapper">
-                    <div class="imgbox">
-                        <img src="" alt="">
+    <!-- 把网页划分为一块一块 -->
+    <div class="cat">
+        <!-- 猫的组成 -->
+        <div class="body"></div>
 
-                    </div>
+        <div class="weiba"></div>
 
-                </div>
-                <div class="poi-info">
-                    <div class="poi-name">黄焖鸡米饭</div>
-                    <div class="price-wrapper">
-                        <div class="location">4.1km</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="poi-item-wrapper">
-
-        </div>
+        <div class="maozhua"></div>
 
     </div>
-    <!-- <div id="map"></div> -->
-    <script>
-        // < !--1.距离-- >
-        // < !--2.点 经纬度-- >
-        // 命名规范
-        const myLatitude = '28.544622',
-            myLongitude = '115.941546',
-            kfcLatitude = '28.549066',
-            kfcLongitude = '115.950531';
-
-        // sdk 有点大，他在远方
-        // js 事件机制
-        window.onload = function () {
-            function parseDistance(distance) {
-                if (distance < 1000) {
-                    return parseInt(distance);
-                } else {
-                    return (distance / 1000).toFixed(1);
-                }
-
-            }
-            // 开始js编程
-            const map = new BMap.Map();
-            // map.centerAndZom(" 东华理工大学", 17)
-
-            // 两点距离
-            const myPoint = new BMap.point(myLongitude, myLatitude);
-            const kfcPoint = new BMap.point(kfcLongitude, kfcLatitude);
-            const distance = parseDistance(
-                map.getDistance(myPoint, kfcPoint)
-            );
-            console.log(distance);
-            document.querySelector('.poi-name').innerHTML = '肯得基';
-            document.querySelector('.location').innerHTML = distance;
-        }
-
-
-    </script>
-
 </body>
 
 </html>
