@@ -6,89 +6,129 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* html,
+        body {
+            width: 100%;
+            height: 100%; */
+        /* } */
+
+        .view {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-color: #ffebeb;
+        }
+
+        html {
+            font-size: 37.5px;
+        }
+
+        .bear {
+            width: 6.5rem;
+            /* rem:相对单位 相对于HTML的font-size */
+            height: 1.89rem;
+            /* 如果width固定了，可以用auto达到水平居中 */
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+
+        .bear-img {
+            background: url();
+            width: 2.4rem;
+            height: 1.89rem;
+            background-size: 100% 100%;
+            position: absolute;
+            right: 0;
+            top: 0;
+            animation: run 1s linear forwards;
+        }
+
+        .progress {
+            width: 6.25rem;
+            height: 0.245rem;
+            border: 2px solid black;
+            border-radius: .5rem;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+        }
+
+        .progress-red {
+            background-color: red;
+            width: 100%;
+            height: 100%;
+            float: right;
+            animation: progress 1s linear forwards;
+
+        }
+
+        /* @keyframes progress {
+            from {
+                width: 0%;
+            }
+
+            to {
+                widows: 100%;
+            }
+
+        } */
+
+        @keyframes run {
+            0% {
+                transform: translate3d(0, 0, 0);
+
+            }
+
+            4% {
+                transform: translate3d(0, -.125rem, 0);
+            }
+
+            8% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            20% {
+                transform: translate3d(-.4rem, -.125rem, 0);
+            }
+
+            24% {
+                transform: translate3d(-.8rem, 0, 0);
+            }
+        }
+    </style>
+
 </head>
 
 <body>
-    <!-- 属性：action class -->
-    <!-- action表单提交到那里去 -->
-    <form action="http://www.baidu.com" class="from" name="myform">
-        <div>
-            <label for="userName">用户名：</label>
-            <input type="text" placeholder="输入用户名" id="userName" name="userName">
+    <div class="view">
+        <div class="bear">bear
+            <div class="bear-img"></div>
         </div>
-        <div>
-            <label for="pwd">密码：</label>
-            <input type="text" placeholder="输入密码" id="userName" name="pwd">
+        <div class="progress">
+            <div class="progress-red"></div>
         </div>
-        <div>
-            <label for="repwd">确认密码：</label>
-            <input type="text" placeholder="再次输入密码" id="userName" name="repwd">
-        </div>
-        <div>
-            <label for="sex">性别：</label>
-            <input type="radio" value="nan" name="sex" id="nan" checked>
-            <label for="nan">男</label>
 
-            <input type="radio" value="nv" name="sex" id="nv">
-            <label for="nv">女</label>
-        </div>
-        <div>
-            <label for="hobby">爱好</label>
-            <select name="hobby" id="hobby">
-                <option value="dog">dog</option>
-                <option value="cat" selected>cat</option>
-
-            </select>
-        </div>
-        <button type="submit">提交</button>
-        <a href="http//www.baidu.com">baidu</a>
-        <div>
-            <span>用户名：123</span>
-            <span>密码：123</span>
-            <span>sex：123</span>
-            <span>hobby：123</span>
-        </div>
-    </form>
+    </div>
     <script>
-        //从1 拿到form
-        //document.forms取到所有表单
-        const form = document.forms.myform
-        // console.log(form);
-        const hobby = form.hobby.value
-        // console.log(hobby);
-
-        form.addEventListener('submit', function (event) {
-            console.log('提交了');
-            //阻止html表单默认的特点/事件
-            event.preventDefault();
-            const userName = form.userName.value;
-            const pwd = form.pwd.value;
-            const repwd = form.repwd.value;
-            const sex = form.sex.value;
-            const hobby = form.hobby.value;
-            if (userName.trim().length === 0) {
-                alert('userName 不能为空')
+        const progress = document.querySelector('.progress-red')
+        var width = 0;
+        var interval = setInterval(function () {
+            width = width + 10;
+            if (width > 100) {
+                clearInterval(interval);
                 return;
+
             }
-            if (repwd.trim() !== pwd) {
-                alert('确认密码和密码不一致');
-                return;
-            }
-            // console.log(userName, pwd.repwd, sex, hobby);
-            const div = document.createElement('div');
-            div.innerHTML = `
-            <span>用户名：${userName}</span>
-            <span>密码：${pwd}</span>
-            <span>sex：${sex}</span>
-            <span>hobby：${hobby}</span>
-            `
+            progress.style.width = width + '%'
 
-            document.body.appendChild(div)
-
-
-
-        })
-
+        }, 100)
     </script>
 </body>
 
