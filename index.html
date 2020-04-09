@@ -5,131 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        /* html,
-        body {
-            width: 100%;
-            height: 100%; */
-        /* } */
-
-        .view {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            background-color: #ffebeb;
-        }
-
-        html {
-            font-size: 37.5px;
-        }
-
-        .bear {
-            width: 6.5rem;
-            /* rem:相对单位 相对于HTML的font-size */
-            height: 1.89rem;
-            /* 如果width固定了，可以用auto达到水平居中 */
-            margin-left: auto;
-            margin-right: auto;
-            position: relative;
-        }
-
-        .bear-img {
-            background: url();
-            width: 2.4rem;
-            height: 1.89rem;
-            background-size: 100% 100%;
-            position: absolute;
-            right: 0;
-            top: 0;
-            animation: run 1s linear forwards;
-        }
-
-        .progress {
-            width: 6.25rem;
-            height: 0.245rem;
-            border: 2px solid black;
-            border-radius: .5rem;
-            margin-left: auto;
-            margin-right: auto;
-            overflow: hidden;
-        }
-
-        .progress-red {
-            background-color: red;
-            width: 100%;
-            height: 100%;
-            float: right;
-            animation: progress 1s linear forwards;
-
-        }
-
-        /* @keyframes progress {
-            from {
-                width: 0%;
-            }
-
-            to {
-                widows: 100%;
-            }
-
-        } */
-
-        @keyframes run {
-            0% {
-                transform: translate3d(0, 0, 0);
-
-            }
-
-            4% {
-                transform: translate3d(0, -.125rem, 0);
-            }
-
-            8% {
-                transform: translate3d(0, 0, 0);
-            }
-
-            20% {
-                transform: translate3d(-.4rem, -.125rem, 0);
-            }
-
-            24% {
-                transform: translate3d(-.8rem, 0, 0);
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="./style.css">
+    <title>kiss</title>
 
 </head>
 
 <body>
-    <div class="view">
-        <div class="bear">bear
-            <div class="bear-img"></div>
+    <div class="container">
+        <div class="ball" id="l-ball">
+            <div class="face face-l">
+                <div class="eye eye-l"></div>
+                <div class="eye eye-r"></div>
+                <div class="mouth"></div>
+            </div>
         </div>
-        <div class="progress">
-            <div class="progress-red"></div>
+        <div class="ball" id="r-ball">
+            <div class="face face-r">
+                <div class="eye eye-l eye-r-p"></div>
+                <div class="eye eye-r eye-r-p"></div>
+                <div class="mouth mouth-r"></div>
+                <div class="kiss-m">
+                    <div class="kiss"></div>
+                    <div class="kiss"></div>
+                </div>
+            </div>
         </div>
-
     </div>
-    <script>
-        const progress = document.querySelector('.progress-red')
-        var width = 0;
-        var interval = setInterval(function () {
-            width = width + 10;
-            if (width > 100) {
-                clearInterval(interval);
-                return;
-
-            }
-            progress.style.width = width + '%'
-
-        }, 100)
-    </script>
 </body>
 
 </html>
