@@ -5,32 +5,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="./style.css">
-    <title>kiss</title>
+    <title>Document</title>
+    <style>
+        #page-one {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            background-color: yellow;
+            text-align: center;
+            color: white;
+        }
 
+        #page-one button {
+            outline: none;
+            border: 1px solid transparent;
+            padding: 6px 12px;
+            background-color: #428bca;
+            width: 300px;
+            border-radius: 4px;
+        }
+
+        #page-two {
+            display: flex;
+            /* 换行 */
+            flex-wrap: wrap;
+        }
+
+        #page-two .block {
+            background-color: teal;
+            width: 50%;
+            height: 20px;
+
+
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="ball" id="l-ball">
-            <div class="face face-l">
-                <div class="eye eye-l"></div>
-                <div class="eye eye-r"></div>
-                <div class="mouth"></div>
-            </div>
-        </div>
-        <div class="ball" id="r-ball">
-            <div class="face face-r">
-                <div class="eye eye-l eye-r-p"></div>
-                <div class="eye eye-r eye-r-p"></div>
-                <div class="mouth mouth-r"></div>
-                <div class="kiss-m">
-                    <div class="kiss"></div>
-                    <div class="kiss"></div>
-                </div>
-            </div>
-        </div>
+    <div id="page-one">
+        <h1>辩色率测试</h1>
+        <p>找出所有不同的方块</p>
+        <button>开始挑战</button>
+
     </div>
+
+    <div id="page-two">
+        <div class='block'></div>
+        <div class='block'></div>
+        <div class='block'></div>
+        <div class='block'></div>
+
+    </div>
+    <script>
+        const pageOne = document.querySelector('#page-one');
+        const pageTwo = document.querySelector('page-two');
+        const startBtn = document.querySelector('#page-one button');
+        startBtn.addEventListener('click', function () {
+            document.body.removeChild(pageOne);
+            init();
+        })
+        let step = 1;
+        function init() {
+            step++;
+            let blockwidth = 100 / step;
+            let arr = [];
+            for (let i = 0; i < step * step; i++) {
+                let item = `
+                <div class='block'></div>
+                `
+            }
+            arr.push(item);
+
+        }
+
+        pageTwo.innerHTML = arr.join('')
+    </script>
 </body>
 
 </html>
