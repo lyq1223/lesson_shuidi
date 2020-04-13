@@ -1,18 +1,31 @@
-const mongoose = require('mongoose')
-
-mongoose.connect('mongodb://localhost/playground', { useNewUrlParser: true })
-    .then(() => console.log('数据库连接成功'))
-    .catch(err => console.log(err, '数据库连接失败'));
-
-const courseSchema = new mongoose.Schema({
-    name: String,
-    author: String,
-    isPublished: Boolean
-});
-
-const Course = mongoose.model('Course', courseSchema)
-
-Course.create({ name: 'javascript', author: '黑马讲师', isPublished: false }, (err, result) => {
-    console.log(err)
-    console.log(result)
+// 引入express框架
+const express = require('express');
+//创建网站服务器
+const app = express();
+//app.use 接收所有请求的中间件
+app.use((req, res, next) => {
+    console.log('请求走了app.use中间件')
+    next()
 })
+// 当客户端访问/request请求的时候走当前中间件
+app.use('/request', (req, res, next) => {
+    console.log('请求走了app.use/ request中间件')
+    next()
+})
+
+//会走第一个而不会第二个，因为第一个没有设置请求路径，会接收所有请求的中间件，而第二个当访问/request时才使用
+app.get('/list', (req, res) => {
+    res.send('/list')
+})
+
+app.get('/request', (req, res, next) => {
+    req.name = "张三";
+    next();
+})
+
+app.get('/request', (req, res) => {
+    res.send(req.name)
+})
+//监听端口
+app.listen(8080);
+console.log('网站服务器启动成功');
