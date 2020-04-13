@@ -1,20 +1,16 @@
-const mongoose = require('mongoose')
+// 引入express框架
+const express = require('express');
+//创建网站服务器
+const app = express();
 
-mongoose.connect('mongodb://localhost/playground', { useNewUrlParser: true })
-    .then(() => console.log('数据库连接成功'))
-    .catch(err => console.log(err, '数据库连接失败'));
+app.get('/request', (req, res, next) => {
+    req.name = "张三";
+    next();
+})
 
-const courseSchema = new mongoose.Schema({
-    name: String,
-    author: String,
-    isPublished: Boolean
-});
-
-const Course = mongoose.model('Course', courseSchema)
-
-const course = new Course({
-    name: 'node.js基础',
-    author: '黑马讲师',
-    isPublished: true
-});
-course.save();
+app.get('/request', (req, res) => {
+    res.send(req.name)
+})
+//监听端口
+app.listen(8080);
+console.log('网站服务器启动成功');
