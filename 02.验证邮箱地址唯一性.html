@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>验证邮箱地址是否已经注册</title>
+    <link rel="stylesheet" href="/assets/bootstrap/dist/css/bootstrap.min.css">
+    <style type="text/css">
+        p:not(:empty) {
+            padding: 15px;
+
+        }
+
+        .container {
+            padding-top: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-group">
+            <label>邮箱地址</label>
+            <input type="email" class="form-control" placeholder="请输入邮箱地址" id="email">
+        </div>
+        <p id="info"></p>
+    </div>
+    <script>
+        var emailInp = document.getElementById('email');
+        var info = document.getElementById('info');
+
+        emailInp.onblur = function () {
+            alert(1)
+        }
+
+    </script>
+</body>
+
+</html>
