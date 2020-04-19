@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .parent {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #000;
+        }
+
+        .child {
+            width: 100px;
+            height: 100px;
+            border: 1px solid red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="parent">
+        parent
+        <div class="child">
+            child
+        </div>
+        <a href="./dom.html"></a>
+    </div>
+    <script>
+        const parent = document.querySelector('.parent');
+        const child = document.querySelector('.child');
+        parent.addEventListener('click', () => {
+            console.log('parent被点击了');
+        })
+
+        child.addEventListener('click', (event) => {
+            // child触发click的时候就是目标阶段
+            console.log('child被点击了');
+            //阻止冒泡
+            event.stopPropagation();
+        })
+
+        //parent 包含者 child ，点击child时侯 能不能算作同时点击了 parent ？
+        //算
+        // IE: 冒泡 bubble
+        // firefox: 捕获 capture 
+        // w3c 统一规范 bubble、capture融合
+        document.addEventListener('click', () => {
+            console.log('document被点击了');
+        })
+
+        window.addEventListener('click', () => {
+            console.log('window被点击了');
+        })
+
+        //阻止默认事件，html标签有一些特殊功能，比如 a 点击了之后就会跳转页面，我们阻止了它 就不会发生跳转事件
+        document.querySelector('a').addEventListener('click', function (event) {
+            event.preventDefault();
+        })
+    </script>
+</body>
+
+</html>
