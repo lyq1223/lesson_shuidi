@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        //复杂数据类型
+        // <!-- object对象字面量 -->
+        let obj = {
+            name: 'lyq',
+            age: 18
+        }
+        // <!-- 不是一成不变的， 可以对他增 删 改 查 -->
+        delete obj.name;
+        obj.school = 'ECUT';
+        console.log(obj);
+        // 赋值操作： 指向了同一块内存地址
+        let obj1 = obj;
+        obj1.homeTown = 'jx';
+
+        console.log(obj1);
+
+        let arr1 = [0, 1, 2];
+        let arr2 = arr1;
+        arr2.push(3); //puah()添加一项数据在指定数组后面
+        console.log(arr1, arr2);
+
+        // 基本数据类型 
+        // 赋值互不相关
+        let str1 = 'ECUT';  //str1是变量，ecut是值
+        let str2 = str1;
+        str2 = 'ECIT';
+        console.log(str1, str2)
+
+    </script>
+</body>
+
+</html>
