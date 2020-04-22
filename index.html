@@ -4,16 +4,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vue.js实例</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* html,
+        body {
+            width: 100%;
+            height: 100%; */
+        /* } */
+
+        .view {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            background-color: #ffebeb;
+        }
+
+        html {
+            font-size: 37.5px;
+        }
+
+        .bear {
+            width: 6.5rem;
+            /* rem:相对单位 相对于HTML的font-size */
+            height: 1.89rem;
+            /* 如果width固定了，可以用auto达到水平居中 */
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+        }
+
+        .bear-img {
+            background: url();
+            width: 2.4rem;
+            height: 1.89rem;
+            background-size: 100% 100%;
+            position: absolute;
+            right: 0;
+            top: 0;
+            animation: run 1s linear forwards;
+        }
+
+        .progress {
+            width: 6.25rem;
+            height: 0.245rem;
+            border: 2px solid black;
+            border-radius: .5rem;
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
+        }
+
+        .progress-red {
+            background-color: red;
+            width: 100%;
+            height: 100%;
+            float: right;
+            animation: progress 1s linear forwards;
+
+        }
+
+        /* @keyframes progress {
+            from {
+                width: 0%;
+            }
+
+            to {
+                widows: 100%;
+            }
+
+        } */
+
+        @keyframes run {
+            0% {
+                transform: translate3d(0, 0, 0);
+
+            }
+
+            4% {
+                transform: translate3d(0, -.125rem, 0);
+            }
+
+            8% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            20% {
+                transform: translate3d(-.4rem, -.125rem, 0);
+            }
+
+            24% {
+                transform: translate3d(-.8rem, 0, 0);
+            }
+        }
+    </style>
+
 </head>
 
 <body>
-    <h1>Vue2.0实例</h1>
-    <hr>
-    <ol>
-        <li><a href="./helloworld.html">Hello World 实例</a></li>
-    </ol>
+    <div class="view">
+        <div class="bear">bear
+            <div class="bear-img"></div>
+        </div>
+        <div class="progress">
+            <div class="progress-red"></div>
+        </div>
 
+    </div>
+    <script>
+        const progress = document.querySelector('.progress-red')
+        var width = 0;
+        var interval = setInterval(function () {
+            width = width + 10;
+            if (width > 100) {
+                clearInterval(interval);
+                return;
+
+            }
+            progress.style.width = width + '%'
+
+        }, 100)
+    </script>
 </body>
 
 </html>
