@@ -1,23 +1,35 @@
-const ages = [32, 15, 19, 12];
-// 所有大于18的数字
-// const nums = [];
-// for (let age of ages) {
-//     if (age >= 18) {
-//         nums.push(age);
-//     }
-// }
+// 将一个字符串改变成另一个字符串，莱文斯坦距离多少？
+var a = "mitcmu";
+var b = "mtacnu";
+var n = 6, m = 6; // 长度  有可能不等 
+// 各种策略都去尝试下， 用递归很容易  f(n, m)  f(0, 0 ) 
+// 回溯
+var minDist = Infinity;//   最大值， JS 无穷大
+// 一个大问题  分成若干个相似的小问题， 递归
+function lwstBT(i, j, edist) {  // 递归 每一次都是 i, j 
+    // dist 依赖上一步的编辑距离 0   + 1
+    // 退出条件
+    if (i == n || j == m) { // 不一定同时到达
 
-// console.log(nums);
-// 命名
-// ages 数组 ，filter 语义化的 过滤
-// 1. 计数 for循环：机器化，
-// 2.表述性好一些 forEach 函数式编程 提升可读性的
-const adultArr = ages.filter(age => age >= 18);
-// console.log(age, index, o);
-//数组里面是否有
-const adultPresent = ages.some(age => age >= 18)
-console.log(adultPresent);
-//是否所有人满足需求？
-const allOldEnough = ages.every(age => age >= 18)
+        if (i < n) edist += (n - i); // 
+        if (j < m) edist += (m - j);
+        if (edist < minDist) minDist = edist;
+        return;
+    }
 
-console.log(allOldEnough)
+    if (a[i] == b[j]) {
+        lwstBT(i + 1, j + 1, edist) // 两个相等， 不改变编辑距离
+    } else {
+        //穷举
+        // 鹰的眼睛 附近的情况 
+        lwstBT(i + 1, j, edist + 1); // 删除 a[i] 或者 b[j]前添加一个字符 
+        // 增
+        // 删
+        lwstBT(i, j + 1, edist + 1);  // 删除b[j] 或  a[i]前添加一个字符
+        lwstBT(i + 1, j + 1, edist + 1);  // 替换为相同字符 
+        // 改
+    }
+}
+lwstBT(0, 0, 0);
+
+console.log(minDist);
