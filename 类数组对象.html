@@ -1,0 +1,52 @@
+<ul>
+    <li></li>
+    <li></li>
+    <li></li>
+</ul>
+<script>
+    function person() { }
+    //静态方法：不需要实例化，就可以调用的
+    person.from = function () {
+        console.log('女娲')
+    }
+    Person.prototype.forEach = function () {
+        console.log('循环')
+    }
+    //实例对象
+    let didi = new Person();
+    diid.forEach
+
+    //类似数组对象
+    // 1.可以像数组一样，用数组[i]取值
+    // 2.length
+    // 3.不全是数组
+    // 比如：arrguments就是类似数组对象,NodeList(querySelectorAll选择的)
+    const lis = document.querySelectorAll('li')
+    // console.log(lis);/
+    //使用map方法
+    // lis.map(function () { }),这是错误的
+    // 需要借用
+    Array.prototype.map.call(lis, function (isNode) {
+        console.log(isNode);
+    })
+
+    let arr = [0, 1]
+    console.log(arr);
+    function sum() {
+        //参数个数 也不确定有几个
+        console.log(argument[0], arguments)
+        //类似数组对象不能使用forEach循环，只有数组才有forEach
+        // 1.不能用数组api但是想要用，可以借用一下，知道它在js里面哪里，考虑 this
+        // arguments.forEach拿不到，要用Array.prototype.forEach才能在类似数组里面实现
+        Array.prototype.forEach.call(arguments, function (num) {
+            console.log(num);
+        })
+        // 2.Array.from()方法从一个类似数组对象创建一个新的数组
+        const arr = Array.from(arguments);
+        arr.forEach(function (num) {
+            console.log(num)
+        })
+    }
+    // Array.prototype.forEach
+    // Array.from 静态方法
+</script>
