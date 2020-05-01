@@ -1,39 +1,49 @@
-var fs = require('fs'); // node file system node 自己的模块
-var path = require('path'); //路径
-// uuid npm 第三方
-// fs.readFile('aa.txt', function(err, data) {
-//   if (err) {
-//     console.log(err);
-//     return;
-//   }
-//   console.log(data.toString());
-// })
+import Vue from 'vue'
+import Vuex from 'vuex'
 
-function getDirFiles(startPath) {
-    let result = [];
-    // 递归
-    function finder(parentPath) {
-        // console.log(path);
-        let files = fs.readdirSync(parentPath);
-        if (!files.length) return;
-        // console.log(files);
-        files.forEach(function (val, index) {
-            // console.log(val, index);
-            // 目录还是文件
-            let fPath = path.join(parentPath, val);
-            // console.log(fPath);
-            let stats = fs.statSync(fPath);
-            if (stats.isDirectory()) {
-                finder(fPath);
-            }
-            if (stats.isFile()) {
-                result.push(fPath);
-            }
-        })
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    add(state) {
+      state.count++
     }
-    finder(
-        path.join(process.cwd(), startPath)
-    );
-    return result;
+  },
+  //只有mutations中定义的函数，才有权利修改 state 中的数据
+  mutations: {
+    addN(state, step) {
+      state.count += step
+    },
+    sub(state) {
+      state.count--
+    },
+    subN(state, step) {
+      state.count -= step
+    },
+    
+  },
+  actions: {
+    addAsync(context) {
+      setTimeout(() => {
+        // 在actions中，不能直接修改 state中的数据；
+        // 必须通过 context.commit()触发某个 mutation 才行
+        context.commit('add')
+      }, 1000)
+    },
+    subAsync(context) {
+      setTimeout(() => {
+        // 在actions中，不能直接修改 state中的数据；
+        // 必须通过 context.commit()触发某个 mutation 才行
+        context.commit('sub')
+      }, 1000)
+    }
+  },
+  getters: {
+    showNum(state) => {
+  return '当前最新的数量是[' + state.count + ']'
 }
-console.log(getDirFiles('src'));
+  }
+})
