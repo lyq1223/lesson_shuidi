@@ -1,163 +1,111 @@
 <template>
   <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/> -->
-    <h1>订单管理</h1>
-    <!-- v-loading数据没来之前先转转 -->
-    <el-table
-    v-loading="listLoading"
-    :data="list"
+    <!-- <img alt="Vue logo" src="./assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js App"/> -->
+    <!-- show-checkbox可以选中级别 -->
+    <!-- node-key="id"每个节点唯一的标志就是id -->
+    <!-- :default-expanded-keys="[2,3]"默认把第2，第3的id key的展开 -->
+    <!-- <el-tree 
+    :data="data"
+    show-checkbox
+    node-key="id"
+    :default-expanded-keys="[2,3]"
+    :default-checked-keys="[5]"
     >
-    <el-table-column label="ID"
-    prop="_id"
-    align="center"
-    width="80"
-    >
-    <!-- 用来为表格加些东西,进行格式化
-    slot-scope="{row}代表这一行，拿到行对应的值 -->
-    <template slot-scope="{row}">
-      <span>{{row._id}}</span>
-    </template>
-    </el-table-column>
-    <el-table-column label="Name"
-    prop="name"
-    align="center"
-    width="200"
-    >
-    <template slot-scope="{row}">
-      <span>{{row.name}}</span>
-    </template>
-    </el-table-column>
-    <el-table-column label="OrderDate"
-    prop="orderDate"
-    align="center"
-    width="100"
-    >
-    <template slot-scope="{row}">
-      <span>{{row.orderDate}}</span>
-    </template>
-    </el-table-column>
-    <el-table-column label="状态"
-    prop="status"
-    align="center"
-    width="400"
-    >
-    <template slot-scope="{row}">
-      <span>{{row.status}}</span>
-    </template>
-    </el-table-column>
-    <el-table-column label="邮费"
-    prop="shippingFee"
-    align="center"
-    width="100"
-    >
-    <template slot-scope="{row}">
-      <span>{{row.shippingFee}}</span>
-    </template>
-    </el-table-column>
-    <el-table-column label="单价"
-    prop="total"
-    align="center"
-    width="100"
-    >
-    <template slot-scope="{row}">
-      <span>{{row.total}}</span>
-    </template>
-    </el-table-column>
-    </el-table>
-    <!-- 分页组件:total=""总共的数量有多少 修饰分页器layout 
-    :current-page.sync="page" 同步页-->
-    <el-pagination
-      :current-page.sync="page"
-      :total="total"
-      :pageSize="limit"
-      layout="total, prev, pager, next"
-      @current-change="handleCurrentChange">
-    </el-pagination>
+    </el-tree> -->
+
+    <!-- 手写一个 -->
+    <c-tree :data="myData"></c-tree>
   </div>
 </template>
+
 <script>
-import Axios from 'axios';
+// import HelloWorld from './components/HelloWorld.vue'
+import CTree from '@/components/c-tree';
 export default {
+  name: 'App',
   data() {
     return {
-      page:1, //当前页
-      total:100, //一共多少条数据
-      limit:20, //每页显示20条
-      listLoading:true, //加载数据中
-      list: [
-        // {
-        //   "_id": "121212",
-        //   "name": "韭黄",
-        //   "orderDate": new Date(),
-        //   "status": "completed",
-        //   shippingFee: "0.5",
-        //   total: "111"
-        // },
-        // {
-        //   "_id": "121212",
-        //   "name": "韭黄",
-        //   "orderDate": new Date(),
-        //   "status": "canceled",
-        //   shippingFee: "0.6",
-        //   total: "111"
-        // },
-        // {
-        //   "_id": "121212",
-        //   "name": "韭黄",
-        //   "orderDate": new Date(),
-        //   "status": "created",
-        //   shippingFee: "0.7",
-        //   total: "111"
-        // }
-      ]
-    }
-  },
-  mounted(){
-    // setTimeout(()=>{
-    //   this.listLoading = false
-    // },1000)
-    // Axios.post('/api/orders',{
-    //   params: {
-    //     // 分页参数        
-    //   }
-    // })
-    //不能接受动态路由吗？ /api/orders/:page/:limit
-    // Axios.get('/api/orders',{
-    //   params: {
-    //     // 分页参数 
-    //     page: this.page,
-    //     limit: this.limit       
-    //   }
-    // })
-    // Axios.post('/api/orders',{
-      Axios.get('/api/orders',{
-      params: {
-        // 分页参数 
-        page: this.page,
-        limit: this.limit       
-      }
-    })
-    .then(res => {
-      console.log(res);
-      // this.list = res.data.orders
-      this.list = res.data.result
-      setTimeout(()=>{
-        this.listLoading = false
-      },1000)
-    })
-  },
-  methods: {
-    handleCurrentChange(page) {
-      // 翻页响应联动事件
-      console.log(page);
-    }
-  }
+      data: [
+        {
+          id: 1,
+          label: '一级 1',
+          children: [{
+            id: 4,
+            label: '二级 1.1',
+            children: [{
+              id: 9,
+              label: '三级 1.1.1'
+            },{
+              id: 10,
+              label: '三级 1.1.2'
+            }]          
+          }]
+        },
+        {
+          id: 2,
+          label: '一级 2',
+          children: [{
+            id: 5,
+            label: '二级 2.1',
+            },{
+              id: 6,
+              label: '二级 2.2',
+            }]          
+          },
+          {
+            id: 3,
+            label: '一级 3',
+            children: [{
+              id: 7,
+              label: '二级 3.1',
+              },{
+                id: 8,
+                label: '三级 3.2',
+            }]        
+          }],
+      myData: [
+        {
+          name: 'Web秀',
+          children: [{
+            name: "web前端",
+            children: [{
+              name: 'css'
+            },{
+              name: 'JavaScript'
+            },{
+              name: 'Vue'
+            },{
+              name: '小程序'
+            },{
+              name: 'three.js'
+            }]
+          },{
+            name: '服务器'
+          },{
+            name: '工具类'
+          }]
+        },
+        {
+          name: '今日头条',
+          children: [{
+            name: '热搜'
+          },{
+            name: '搜索'
+          }]
+        },
+        {
+            name: 'Angular'
+        }        
+      ]  
+     }    
+   },
+   components: {
+     CTree
+   }
 }
 </script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -165,21 +113,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  margin-top: 60px;
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-/* .red{
-  color: red;
-} */
 </style>
