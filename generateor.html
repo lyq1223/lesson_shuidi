@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // function foo() {
+        //     setTimeout(()=>{
+        //         console.log(1);
+        //     },3000)
+        //     return 'foo';
+        //     // console.log(1);
+        //     // console.log(2);
+        //     // console.log(3);
+        //     //这种函数，一旦发生调用，就一次性全部不执行完，而generator可以被打断，执行到yield的时候就停了一次
+        // }
+        //让它更像await的语法 也返回一个Promise 1.保证a的值是这里resolve 的123 2.保证顺序（foo不resolve，后面的就不执行）
+        //也就是把yield后面的代码，都挪到.then里面去 用index.js展现 嵌套是为了保证顺序，同时让格式更同意
+        function foo() {
+            return new Promise((resolve)=>{
+                setTimeout(()=>{
+                    console.log(123);
+                },3000)
+            })
+        }
+        function* test() {  //*习惯与function连起来，代表一个generator函数，最好不与后面的test连起来
+            console.log('start');
+            //使用了定时器的时候，不会等着定时器的时间过后在执行代码，功能类似await但是还没实现等定时器
+            let a = yield foo();  //yield后面什么都能接,我们这里接一个函数 //返回一个'foo'
+            //a的值到底是什么？是语法规范限制，a,b与yield后面的值没有任何关系，
+            console.log('a',a); //"undefined"
+            let b = yield 2;  //这个就被当作value的值
+            //b的值到底是什么？
+            console.log('b',b); //"undefined"
+            //那a, b到底是什么
+            console.log('end');
+            // console.log('endend');
+            //还有 return关键词还是有用的
+        }
+        // // 测试一下加了*的函数与普通函数有什么区别
+        // //调用,如果想普通函数一样调用：
+        // test(); //没有反应
+        // // 要用next调用
+        // console.log(test());
+        // let g = test();
+        // console.log(g.next());
+        //语法规定，a的值可以通过next方法传递
+        //next()传递的参数，要注意，是传给上一个yield的返回值，第一个next是从start+yield foo()然后停止，
+        // console.log(g.next());
+        // console.log(g.next('A Value')); //此时是没有上一个yield的（因为是执行到了第一个yield），所以前面再加一个next
+        // console.log(g.next('A Value'));
+        //要从第二个开始传值，注意顺序
+        
+        // // console.log(g.next());  //调用两次之后才出现end
+        // // //调用了两次后之后 done-》true
+        // // console.log(g.next());
+        // //测试一下 是不是可以被终止，先执行一次g在执行foo函数，然后再启动下一步
+        // foo();
+        // // console.log(g.next());
+        // // console.log(g.next()); //第三次调用 会出来最后的end，同时，done为true,后面没有了
+        // //由此可见，1.generator内部相比普通函数而言，是可以被终止的
+        // //2.相比普通函数，generator调用的时候是一步步的，用next来调用
+        // // while(!g.next().done) {
+        // //     g.next();
+        // // }
+
+
+        // //协程 跟generator很像 就认为像test这样一个任务，里面的子任务是可以被打断的
+        // function generatorAutoRun(gen) {
+        //     //实现gnerator自动全部执行完，不用一个个next
+        //     //可以利用done，done是需要一个对象，就像g,我们放一个gen
+        //     let g = gen();
+        //     //用递归的方式写
+        //     function next() {
+        //         let res = g.next(); //然后就有done属性来
+        //         if (res.done) return;
+        //         next(); //递归的终止条件就是done为true
+        //     }
+        //     //启动我们的递归
+        //     next();
+        //     generatorAutoRun(test); //测试一下
+        // }
+
+        //前面的还不能实现next传值 加工 想让a的值 就是yield后面的东西返回的 这是个正常的思路
+        //下一次调用的时候，把上一次调用的next里面的value取出来
+        function generatorAutoRun(gen) {
+            //实现gnerator自动全部执行完，不用一个个next
+            //可以利用done，done是需要一个对象，就像g,我们放一个gen
+            let g = gen();
+            //用递归的方式写
+            function next(value) {
+                let res = g.next(value); //然后就有done属性来 //交给下一次的next
+                if (res.done) return;
+                next(res.value); //递归的终止条件就是done为true  //取出上一次的value
+            }
+            //启动我们的递归
+            next();
+        }
+        generatorAutoRun(test); //测试一下
+
+    </script>
+</body>
+</html>
