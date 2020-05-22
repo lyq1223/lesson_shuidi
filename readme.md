@@ -1,90 +1,155 @@
-# 从输入 URL 到页面展示，中间发生了什么? 越细越好 （必考！）
+1. A 垂直居中
+这两个都可以flex;position
+position: absolute relative fixed static sticky  这是position的所有取值
+absolute：绝对定位 相对于父级第一个非static定位,如果没有（比如父级没有设定位） 那就找视窗  移除文档流
+relative: 相对于自己
+fixed： 视窗 移除文档流
+static： 默认 不加position 默认就是static  
+sticky: 粘性 滚动才能看到效果 根据最近滚动祖先动 基于top buttom left定位
+sticky示例:
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+  .out {
+    border: 1px solid #000;
+    height: 200px;
+    width: 100px;
+    overflow: scroll;
+  }
+  .inner {
+    border: 1px solid red;
+    width: 20px;
+    height: 20px;
+    margin-top: 1000px;
+  }
+  .inner1 {
+    border: 1px solid green;
+    width: 20px;
+    height: 20px;
+    margin-top: 40px;
+    position: sticky;
+    top: 10px;
+  }
+  </style>
+</head>
+<body>
+  <div class="out">
+    <div class="inner1"></div>
+    <div class="inner"></div>
+  </div>
+</body>
+</html> -->
+body {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+    }
 
-1. 多进程架构
-2. IPC（inter
+.out {
+    /* position: absolute; top: 50%;
+    transform: translateY(-50%);  */
+    background-color: blue;
+    width: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+    font-size: 20px;
+}
 
-## 如何回答地有条理
+2. 函数中的arguments  把他变成一个真正的数组 用Array.from转化
+是类数组对象 
+3. 两个=
+if([] == false) {console.log(1)};  //[]->""->0 === false->0  true
+if({} == false) {console.log(2)};  
+//({}).toString()-->"[object Object]"-->Number('[object Object]')->NaN 不等于 false
+if([]) {console.log(3)};   //[]->true
+if([1] == [1]) {console.log(4)};  //false
 
-1. 注重细节
-2. 从想当然，到理所应当 v8 引擎及浏览器架构
-3. 这是一个可以用来全面考察，前端是否具有完整计算机本科学习能力的代表题
-   题目关于： Web 开发 + 网络 + 操作系统
-4. 如何规范的回答这道题 是区分新手还是高手的，有条分水岭
-   要回答得有条理，条理核心围绕进程，作为流程细化，回答这个问题的逻辑驱动
+类型转换
+不关注类型 只关注值是否相等 两个值的类型不等式 会进行类型转换(转换规则表)
+===是严格等
+https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Equality_comparisons_and_sameness
 
-动手实操
+ToPrimitive 都是作用在Object上的 把对象转为原始值 调用toString() /valueOf()方法
+基本数据类型（原始）变量及变量对应的的值
+复杂数据类型（对象）
+{} == {} //false
+let a=[1],b=[1],c=4,d=4;
+c==d   //true  c和d指向同一地址的值
+a == b //false 指向的内存地址不一样
 
-1. 浏览器 proxy 通过浏览器来代理我们访问页面
-     <!-- Proxy 对象用于定义基本操作的自定义行为（如属性查找、赋值、枚举、函数调用等）。 -->
-   打开浏览器 关闭其他应用
-   动手 demo 动手实操。
-   发生的应用场景是发生在浏览器上的
-
-- 输入一个不是 URL 的东西
-  输入 URL 发生在浏览器，也叫做上网的代理，同构浏览器来访问，代理我们访问网页的
-  如果当作搜索框来使用：会使用默认的搜索引擎，搜索词条
-  如果输入 URL
-  我们上掘金的时候 没完整的输入域名：juejin.im，浏览器会把域名补全为：https://juejin.im/ 用户体验做得很好，只需要输入容易记的域名，不用写别的。
-  这是【补全协议】
-
-2. 浏览器中 操作系统里的进程
-   shift + esc 打开浏览器给更多工具中的任务管理器
-   细节： 像代码架构分层一样，把流程细化
-   主进程 是管家  
-   web 访问 浏览器 chrome 是一个多进程的一个架构模式，最流畅，但更耗内存，会同时启动多个进程（这是比 IE 优秀的地方），让页面的启动更快
-   打开一个页面，至少有 4 个进程，每个进程负责一件事，进程间并行执行，当应用启动的时候（也就是 Chrome 主进程启动的时候），再加上几个子进程（进程之间是要通信的，进程管理问题。）
-
-   - GPU 进程负责：GPU 加速 (3d 渲染; three.js; css 中的 transform3d; canvas),用来渲染进程
-   - network Service 进程负责：
-   - 标签页进程负责：
-     chorme 多进程架构带来现代浏览器的快速访问体验， chrome 就是代表；多进程架构，可以做到高并发，
-
-   1. 浏览器主进程：
-
-   - 应用启动，启动浏览器
-   - 提供了 URL 输入的交互（输入 URL）；子进程管理；（子进程(进程间通信 IPC)）
-     文件存储功能：
-     文件缓存 访问过的静态文件会在本地缓存，下次使用就直接在本地取
-     cookie localstorage... BOM Browser Object Model
-
-   2. 渲染进程 GPU 将 html css js 图片解析成为可交互的页面
-
-   3. 网络进程 大部分人回答的都是这个进程 提供下载功能 时间上比渲染更早些
-
-- 执行过程梳理：
-  访问过程，问题回答清楚，就是要把执行流程说出来，这个流程是进程间的流程
-  1. 浏览器进程接受到用户输入的 URL 请求时，现在还在主进程上做事情，IPC（主进程调用子进程
-     （进程间通信））将 URL 交给网络进程，网络进程分析一下
-  2. 网络中子进程发起真正的 URL 请求 这个请求是由 c++模块发送请求 node-》c++（它更高效）
-     2.1 请求有 request
-     2.2 response
-  3. 网络进程 接受到响应数据（这里是响应头数据）后（响应数据包括响应头 + 相应体），通知渲染进程开
-     始准备干活
-     因为响应的数据有很多种(text/heml test/json image/jpg)，怎么提前通知渲染进程的？接受到头数据后，
-     交给浏览器主进程
-     会提交导航消息(CommitNavigation)到渲染进程，
-  4. 渲染进程收到导航提交信息后开始准备接受某格式，然后直接和网络进程建立数据通道，网络数据开始分块到达（管道）
-  5. 渲染进程会向浏览器进程发送“确认提交”，告诉浏览器进程已经准备好接受和解析页面数据
-  6. body 到了 到渲染进程进行渲染。 渲染之前，最后还有一个移除之前的页面-》由浏览器渲染。然后确定要更新的文档。豆瓣始终是一个页面
-     页面的重绘和重排。 渲染进程会向主进程提交确定文档消息 pending
-     三个进程+三个消息
+栈内存和堆内存 不是js独有的
+栈内存（小，灵活） 
+    存基本数据类型（原始）
+    变量（它存的是对 对象的地址，指向） 比如 a = 4
+堆内存（大，可以任意对内存进行扩大，缩小）
+    存复杂数据类型（对象）：比如（数组a = [1]）
+    变量是存在栈内存中，但是值存在堆内存中
+4. 以最小的改动解决以下代码的错误（可以使用es6）
+const obj = {
+name: " jsCoder",
+skill: ["es6", "react", "angular"], 
+say: function () {
+    for (var i = 0，len = this.skill.length; i < Len; i++) {
+        setTimeout(function () {
+            console.log('No.' + i + this.name); 
+            console.log(this.skill[i]); 
+            console.log('.........................');
+        },0);
+        console. 1og(i);
+    }
+}
+};
+obj.say();
+5. bind
+bind 一个经典的api
+1:this 
+2:返回一个新的函数 函数式编程风格 定义了很多定义函数的规则  柯里化是其中一种 ke'li'hua 经典的编程
+实现ES5中function原型的bind方法，是的以下程序最后能输出'success'
+function Animal(name, color) {
+    this.name= name;
+    rhis.color = color;
+}
+Animal.prototype.say = function () {
+    return `I'm a ${this.color} ${this.name}`;
+};
+const Cat = Animal.bind(null, 'cat');
+const cat = new Cat('White');
+if (cat.say() === 'I\'m a white cat' &&
+  cat instanceof Cat && cat instanceof Animal) {
+  console.log('success');
+}
 
 
-    并行执行
+## this
+es5普通函数
+1. 不加任何修饰，调用函数，默认this指向全局，浏览器中是window
+foo();
+2. 加 下面的，就指向第一个参数
+foo.call()
+foo.apply()
+foo.bind()
+3. 定义了对象
+对象.  谁调用它就指向那里 obj.foo() obj调用，就指向obj
+4. new
+function Bar() {
+    //this指向谁，a这个属性到底应该加给谁
+    this.a = 123
+}
+// 当new的时候 this的指向才确定下来 此时bar上面就多了一个a属性
+const bar = new Bar() //new的时候this就绑定给了bar
+这就是面向对象的好处
 
-3. 发出请求
-   loading 的过程
-1. DNS 解析（域名解析），第一次的时候从 DNS（Domain Name Server）服务器找到，将域名变成 ip 地址（本地还会存一份）
-   解析完了之后 就会有一个 loading,拿到头信息之后，就会将加载页面的标签 loading
+- 假如我们的函数 即被bind改变this，又被new改变this，这几个改变this有什么优先级吗？
+有的 从小到大1-》2-》3-》4  new的是最高的
+可以测试一下
 
-# 关于学习
-
-1. leetcode 题目
-2. 面试
-   面试： 看掘金面试相关技能点文章的列表
-   问自己问题，回答，回答不了去搜答案，不直接看文章
-   自己解决了才去看文章
-   看文章先看目录，自己先想一下，再去看文章。
-   注重思考，自己总结，然后写掘金文章会提升的很快
-   极客时间 + 掘金 + 书 + leetcode + 剑指 offer
-3. 还可以以写文章的方式来学习,为了文章主题，学习某个知识点。
+## bind
+1. bind.html  bind.js
+2. 加强版bind 我们的bind能不能满足需求呢?
