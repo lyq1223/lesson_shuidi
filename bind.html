@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // bind是在Function.prototype上的
+        // push 方法是已经在Array.prototype.push
+        // 测试：试试bind
+        // 可以把 【 原来参数个数】分两次传
+        // function foo(a,b,c) {
+        //     return this.d+a+b+c;
+        // }
+        // // 1
+        // let obj = {d: 5}
+        // //第一次调用bind 为this绑定对象，绑定在obj上，就能取到this.d的结果
+        // //第一次先传两个参数
+        // let bar = foo.bind(obj, 1, 2)
+        // //第二次调用 将第三个参数传过去
+        // let sum = bar(3)  // => 1 2 3 交给 foo
+        // console.log(sum);
+
+
+
+        let a=[]
+        a.push(1)
+        //call / apply
+        //bind与前两个最大的区别，是他可以返回一个函数，前两个调用完了就没了
+
+        //写个函数判断 js中的数据类型
+        //判断某数据是不是某类型
+        // function isType(data, type) {
+        //     type = `[object ${type}]`
+        //     return Object.prototype.toString.call() === type; //[object Array] | [object Object]...
+        // }
+        // // console.log(isType(a, '[object Array]'))
+        // console.log(isType(a, 'Array')); //可以判断a是不是数组
+
+        // 但是不方便，这样判断。 用bind会方便一点
+        let b = [], c= [];
+        function isType(type,data) {
+            type = `[object ${type}]`
+            return Object.prototype.toString.call(data) === type; //[object Array] | [object Object]...
+        }
+        // console.log(isType(a, '[object Array]'))
+        console.log(isType('Array', a)); //可以判断a是不是数组
+        console.log(isType('Array', c));
+        console.log(isType('Array', b));
+        //柯里化 curry 参数可以不一次性传完，可以分开传
+        const isArrayType = isType.bind(null, 'Array');  // 第一次传参 null 还不知道this指向谁,第一个参数是绑定this的
+        //这样就还能写别的类型的
+        const isObjectType = isType.bind(null, 'Object'); //用bind把参数固定起来
+        const isNumberType = isType.bind(null, 'Number');
+        console.log(isType(isArrayType(a))); //第二次传参
+        console.log(isType(isArrayType(b))); //本质上是要将Array 和 a交给 isArrayType
+
+        //手写一个bind绑定（简单版本）
+        Function.prototype.myBind = function(thisObj, ...arg1){  // ...arg1拿到所有传过来的参数
+            //谁调用bind，我们最终拼好的参数就传给谁  就是这个this调用 也就是这里的fn
+            let fn = this; //bind中的this指向谁？谁调用就指向谁
+            //1 第一次调用bind //调用的是bind
+            function foo(...arg2) {
+            //2 第二次调用bind 等着所有的参数都收到了，才调用this，将两个参数拼接 //调用的是bind返回的函数
+            const args = arg1.concat(arg2);
+            //绑定this 调用isType的时候绑定this
+            //那是谁来apply呢 谁bind就调用谁
+            return fn.apply(thisObj, args);  //要返回结果
+            } 
+            //把别人return出来的结果接着return出去
+            return foo  //bind重要的特性 返回一个函数
+        }
+        //什么时候绑定this呢？是该在外面还是里面呢，现在我们有两个函数myBind和foo
+        // 测试：试试bind
+        // 可以把 【 原来参数个数】分两次传
+        function foo(a,b,c) {
+            return this.d+a+b+c;
+        }
+        // 1
+        let obj = {d: 5}
+        //第一次调用bind 为this绑定对象，绑定在obj上，就能取到this.d的结果
+        //第一次先传两个参数
+        let bar = foo.myBind(obj, 1, 2)
+        //第二次调用 将第三个参数传过去
+        let sum = bar(3)  // => 1 2 3 交给 foo
+        console.log(sum);  //输出 11
+
+        
+       
+    </script>
+</body>
+</html>
