@@ -1,19 +1,26 @@
-// 添加右括号时，左括号数量必须大于右括号数量，并且右括号 < n
-var generateParenthesis = function(n) {
-    let res = [];
-    const parent = function(cur, left, right) {
-        if(cur.length === 2*n) {
-            res.push(cur);
-            return;
+var trap = function(height) {
+    let countsum = 0;     
+    height.forEach((item, index) => {
+        let left = 0, right = 0;
+        for(var i = 0; i <= index; i++) {  //0->0,1->0,1,2->0,1,2,3->...->0,1,...,8
+            // console.log(i);
+            left = Math.max(height[i], left)
+            // console.log(left,'======')
         }
-        if(left < n) {
-            parent(cur + '(',left+1, right);
+        for (var i = index; i < height.length; i++) { //0->1->2->...->8
+            // console.log(i);
+            right = Math.max(height[i], right)
+            // console.log(right,'======')
         }
-        if(right < left){
-            parent(cur+')',left, right+1);
-        }
-    };
-    parent('',0,0);
-    return res;
+        // console.log(left,right);// 每轮的加起来
+        countsum +=Math.min(left, right) -item
+    });
+    
+    // return left;
+    return countsum
 };
-console.log(generateParenthesis(3))
+// console.log(trap([0,1,0,2,1,0,1,3,2,1,2,1]));
+// console.log(trap([1,0,1]));
+console.log(trap([2, 0, 2, 3, 2, 2, 2, 1, 2]));
+
+
