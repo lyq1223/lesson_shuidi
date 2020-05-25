@@ -1,42 +1,24 @@
-var maxSubArray = function(nums) {
-    // 解法1：
-    // let res = [], list = [];
-    // let sum=0;
-    // for(let i = 0; i < nums.length; i++) { 
-    //     // sum += nums[i];
-    //     // console.log(sum, '====');
-    //     if(sum < 0) {
-    //         list.splice(0, i + 1)
-    //         sum = 0;
-    //     }
-    //     list.push(nums[i]);
-    //     sum += nums[i];
-    //     // console.log(sum, '==sum')
-    //     // console.log(list);  
-    //     res.push(sum);       
-    // }
-    // var max = Math.max.apply(null, res);
-    // return max;
-
-    // 解法2，动态规划
-    // 前一个元素大于0（计算的和），将其加到当前元素上
-    let pre = 0, maxAns = nums[0];
-    nums.forEach(element => {
-        pre = Math.max(pre + element, element);
-        maxAns = Math.max(maxAns, pre);
-    });
-    return maxAns;
+var merge = function(intervals) {
+    if(intervals.length<=0) {
+        return [];
+    }
+    intervals.sort((a,b) => a[0] - b[0]);
+    // intervals.sort(function(a,b) {
+    //     return a[0]-b[0];
+    // })
+    let res = [intervals[0]];
+    for(let i = 0; i < intervals.length; i++) {
+        if(res[res.length-1][1] >= intervals[i][0]) {
+            //当后一项的左边界<=前一项的右边界 即说明有相交
+            //合并的时候，右边取最大的那个
+            res[res.length-1][1] = Math.max(intervals[i][1], res[res.length-1][1])
+        }
+        else {
+            //不能合并，存进结果中
+            res.push(intervals[i])
+        }
+    }
+    return res;
 };
-console.log(maxSubArray([-2,1,-3,4,-1,2,1,-5,4]));
-
-// let ans = nums[0];
-    // let sum = 0;
-    // for(const num of nums) {
-    //     if(sum > 0) {
-    //         sum += num;
-    //     } else {
-    //         sum = num;
-    //     }
-    //     ans = Math.max(ans, sum);
-    // }
-    // return ans;
+console.log(merge([[1,3],[2,6],[8,10],[15,18]]));
+console.log(merge([[1,4],[4,5]]));
