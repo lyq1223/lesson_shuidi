@@ -2,21 +2,19 @@ package main
 
 import "fmt"
 
-func jump(nums []int) int {
-	pos := len(nums) - 1
-	step := 0
-	for pos > 0 {
-		for i :=0; i < pos; i++ {
-			if i + nums[i] >= pos {
-				pos = i
-				step++
-				break
-			}
+func maxSubArray(nums []int) int {
+	max := nums[0]
+	for i := 1; i < len(nums); i++ {
+		if nums[i] + nums[i - 1] > nums[i] {
+			nums[i] += nums[i - 1]
+		} 
+		if nums[i] > max {
+			max = nums[i]
 		}
 	}
-	return step
+	return max
 }
 
 func main(){
-	fmt.Println(jump([]int{2,3,1,1,4})) //数组
+	fmt.println(maxSubArray([-2,1,-3,4,-1,2,1,-5,4]))
 }
