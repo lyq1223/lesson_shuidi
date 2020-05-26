@@ -1,23 +1,23 @@
-function max(x, y) {
-    if(x > y) {
-        return x;
-    }
-    return y;
+// 栈
+var MinStack = function() {
+    this.stack = [];
+    this.min_stack = [Infinity];
 }
 
-var jump = function(nums) {
-    // 贪心算法，正向查找最远位置
-    let step = 0;
-    let maxposition = 0;
-    let end = 0;
-    for(let i = 0; i < nums.length - 1; i++) {
-        // 当前能够到达的最大下标位置，记为边界,我们从左到右遍历数组，到达边界时，更新边界并将跳跃次数增加 1。
-        maxposition =max(maxposition, i + nums[i]);
-        // 更新位置和步数
-        if(i === end ){
-            end = maxPosition
-            steps++
-        }
-    }
+MinStack.prototype.push = function(x) {
+    this.stack.push();
+    this.min_stack.push(Math.min(this.min_stack[this.min_stack.length - 1], x)); //!!
+}
+MinStack.prototype.pop = function() {
+    this.x_stack.pop();
+    this.min_stack.pop();
 };
-console.log(jump([2,3,1,1,4]));
+
+MinStack.prototype.top = function() {
+    return this.x_stack[this.x_stack.length - 1];
+};
+
+MinStack.prototype.getMin = function() {
+    return this.min_stack[this.min_stack.length - 1];
+};
+
