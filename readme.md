@@ -1,36 +1,28 @@
-155. 最小栈
-来源：力扣（LeetCode）
-设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+mongodb
+花很多钱，找程序员 服务器
+请求 分布式课程
+mongodb 数据库 可以分布在很多机房 nginx
+10台 mongodb
+访问时，到底哪台及其为你服务
+算法
 
-push(x) —— 将元素 x 推入栈中。
-pop() —— 删除栈顶的元素。
-top() —— 获取栈顶元素。
-getMin() —— 检索栈中的最小元素。
- 
+发文章时比较少1：100 读文章来说
+物理 正确性 一台计算机肯定不够，坏的可能性
+宕机 需要备份机 master
+1台 主数据库 master写入操作，与其他的9台数据库 链路
+9台 从数据库
 
-示例:
+1台主机 写操作   3台从机 同步从
+read               选择的方式？
+如果是读的话，如何选，公平起见，三台机器，负载量 每台机器都有1/3的概率 random()
+如果机器的负载不均衡的时候，把空闲的机器选中
 
-输入：
-["MinStack","push","push","push","getMin","pop","top","getMin"]
-[[],[-2],[0],[-3],[],[],[],[]]
+当一台主机宕机了怎么办？分布式中，就会从9台从数据中选出一台新的变成主的
+如何选举？选举算法，priority权重
 
-输出：
-[null,null,null,null,-3,null,0,-2]
+第169题 简单
+给定一个大小为 n 的数组，找到其中的多数元素。多数元素是指在数组中出现次数大于 ⌊ n/2 ⌋ 的元素。
 
-解释：
-MinStack minStack = new MinStack();
-minStack.push(-2);
-minStack.push(0);
-minStack.push(-3);
-minStack.getMin();   --> 返回 -3.
-minStack.pop();
-minStack.top();      --> 返回 0.
-minStack.getMin();   --> 返回 -2.
- 
+你可以假设数组是非空的，并且给定的数组总是存在多数元素
 
-提示：
-
-pop、top 和 getMin 操作总是在 非空栈 上调用。
-要求在常数时间内检索到最小栈，但是找最小值需要从栈顶到栈底线性扫描一边才能得到栈中的最小元素
-加一个辅助栈，保存栈中最小元素
-链接：https://leetcode-cn.com/problems/min-stack/solution/zui-xiao-zhan-by-leetcode-solution/
+解决：1.投票算法 2.排序，中间的一定是 作业
