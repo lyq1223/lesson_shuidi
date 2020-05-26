@@ -1,10 +1,26 @@
-// 异或运算^
-var singleNumber = function(nums) {
-    let res = 0;
-    for(let i of nums) { //of是遍历value in是遍历key
-        res ^=i;
+
+var maxProduct = function(nums) {
+    // 用最大子序和？
+    // const memo = [];
+    // memo[0] = nums[0];
+    // let max = nums[0];
+    // for(let i = 1; i < nums.length; i++) {
+    //     memo[i] = Math.max(nums[i] * memo[i - 1], nums[i]);
+    //     max = Math.max(max, memo[i]);
+    // }
+    // 但是乘积牵扯到一个负负得正的问题，不能这么算
+    const maxProduct = [];
+    const minProduct = [];
+    // 然后是给数组中的元素赋值
+    maxProduct[0] = nums[0];
+    minProduct[0] = nums[0];
+    let max = nums[0];
+    for(let i = 1; i < nums.length;i++) {
+        maxProduct[i] = Math.max(nums[i], nums[i] * nums[i - 1], nums[i] * minProduct[i - 1]);
+        minProduct[i] = Math.min(nums[i], nums[i] * nums[i - 1], nums[i] * minProduct[i - 1]);
+        max = Math.max(max, maxProduct[i]);
     }
-    return res;
-};
-console.log(singleNumber([4, 2, 2]));
-// 异或运算，相同为0，不同为1,巧妙之处，一次异或得到的最终的值只能是只出现一次的（在其余都出现两次时）
+
+    return max;
+}
+console.log(maxProduct([1,2,-1,-3]));
