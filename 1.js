@@ -1,26 +1,53 @@
+/**
+ * initialize your data structure here.
+ */
+var MinStack = function() {
+    this.list = [];
+    this.minList = [];
+    this.length = 0;
+};
 
-var maxProduct = function(nums) {
-    // 用最大子序和？
-    // const memo = [];
-    // memo[0] = nums[0];
-    // let max = nums[0];
-    // for(let i = 1; i < nums.length; i++) {
-    //     memo[i] = Math.max(nums[i] * memo[i - 1], nums[i]);
-    //     max = Math.max(max, memo[i]);
-    // }
-    // 但是乘积牵扯到一个负负得正的问题，不能这么算
-    const maxProduct = [];
-    const minProduct = [];
-    // 然后是给数组中的元素赋值
-    maxProduct[0] = nums[0];
-    minProduct[0] = nums[0];
-    let max = nums[0];
-    for(let i = 1; i < nums.length;i++) {
-        maxProduct[i] = Math.max(nums[i], nums[i] * nums[i - 1], nums[i] * minProduct[i - 1]);
-        minProduct[i] = Math.min(nums[i], nums[i] * nums[i - 1], nums[i] * minProduct[i - 1]);
-        max = Math.max(max, maxProduct[i]);
-    }
+/** 
+ * @param {number} x
+ * @return {void}
+ */
+MinStack.prototype.push = function(x) {
+    this.list[this.length] = x;
+    let min = this.length > 0 ? this.minList[this.length-1] : Infinity;
+    //取出minList中最小的，方便比较x要不要入栈
+    this.minList[this.length]  = min>x ? x :min;
+    this.length++;
+};
 
-    return max;
-}
-console.log(maxProduct([1,2,-1,-3]));
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function() {
+    this.list.length = --this.length;//??
+    this.minList.length = this.length;//??
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function() {
+        return this.list[this.length - 1];
+
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.getMin = function() {
+        return this.minList[this.length - 1];
+
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * var obj = new MinStack()
+ * obj.push(x)
+ * obj.pop()
+ * var param_3 = obj.top()
+ * var param_4 = obj.getMin()
+ */
