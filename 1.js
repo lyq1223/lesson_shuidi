@@ -1,24 +1,29 @@
-/**
- * Definition for a binary tree node.
- * function TreeNode(val) {
- *     this.val = val;
- *     this.left = this.right = null;
- * }
- */
-/**
- * @param {TreeNode} root
- * @param {TreeNode} p
- * @param {TreeNode} q
- * @return {TreeNode}
- */
-var lowestCommonAncestor = function(root, p, q) {
-    if(root == null || root == p || root == q) {
-        return root; //是自己
+
+var lengthOfLIS = function(nums){
+    var lengthL=[1]; //最大序列长度
+    if(nums.length==0)
+        return 0;    
+    for(var i=1;i<nums.length;i++){ //ii用来计算序列长度
+        var res=1;
+        for(var ii=0;ii<i;ii++){
+            if(nums[ii]<nums[i]){
+                res=Math.max(res,lengthL[ii]+1);
+                console.log(lengthL[ii]+'=====')
+            }
+        }
+        lengthL[i]=res;
     }
-    let left = lowestCommonAncestor(root.left,p, q);
-    let right = lowestCommonAncestor(root.right, p,q);
-    if(left != null && right !=null) {
-        return root; //在左子树和右子树
-    }
-    return left != null? left : right;
-};
+    console.log(lengthL);
+    return Math.max(... lengthL);//lengthL中的最大值
+}
+// console.log(lengthOfLIS([10,9,2,5,3,7,101,18]));
+console.log(lengthOfLIS([4,10,4,3,8,9]));
+
+// if(nums[i+1] > nums[i]){
+        //     lengthL.push(nums[i+1]);
+        // } else {
+            
+        //     count = Math.max(count,lengthL.length+1);
+
+        //     lengthL.splice(0,lengthL.length);
+        // }
