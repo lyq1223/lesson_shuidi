@@ -1,12 +1,12 @@
-466. 统计重复个数
-链接：https://leetcode-cn.com/problems/count-the-repetitions
+820 单词的压缩编码
+链接：https://leetcode-cn.com/problems/short-encoding-of-words
 
-由 n 个连接的字符串 s 组成字符串 S，记作 S = [s,n]。例如，["abc",3]=“abcabcabc”。
+给定一个单词列表，我们将这个列表编码成一个索引字符串 S 与一个索引列表 A。
 
-如果我们可以从 s2 中删除某些字符使其变为 s1，则称字符串 s1 可以从字符串 s2 获得。例如，根据定义，"abc" 可以从 “abdbec” 获得，但不能从 “acbbe” 获得。
+例如，如果这个列表是 ["time", "me", "bell"]，我们就可以将其表示为 S = "time#bell#" 和 indexes = [0, 2, 5]。
 
-现在给你两个非空字符串 s1 和 s2（每个最多 100 个字符长）和两个整数 0 ≤ n1 ≤ 106 和 1 ≤ n2 ≤ 106。现在考虑字符串 S1 和 S2，其中 S1=[s1,n1] 、S2=[s2,n2] 。
+对于每一个索引，我们可以通过从字符串 S 中索引的位置开始读取字符串，直到 "#" 结束，来恢复我们之前的单词列表。
 
-请你找出一个可以满足使[S2,M] 从 S1 获得的最大整数 M 。
-题解：
-https://leetcode-cn.com/problems/count-the-repetitions/solution/jsjie-fa-by-zhi-xing-8/
+那么成功对给定单词列表进行编码的最小字符串长度是多少呢？
+题意:
+从0位置开始遍历字符串S，遇到#停止，得到time 从2位置开始遍历字符串S，遇到#停止，得到me 从5位置开始遍历字符串S，遇到#停止，得到bell
