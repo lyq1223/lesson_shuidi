@@ -1,12 +1,17 @@
-820 单词的压缩编码
-链接：https://leetcode-cn.com/problems/short-encoding-of-words
-
-给定一个单词列表，我们将这个列表编码成一个索引字符串 S 与一个索引列表 A。
-
-例如，如果这个列表是 ["time", "me", "bell"]，我们就可以将其表示为 S = "time#bell#" 和 indexes = [0, 2, 5]。
-
-对于每一个索引，我们可以通过从字符串 S 中索引的位置开始读取字符串，直到 "#" 结束，来恢复我们之前的单词列表。
-
-那么成功对给定单词列表进行编码的最小字符串长度是多少呢？
-题意:
-从0位置开始遍历字符串S，遇到#停止，得到time 从2位置开始遍历字符串S，遇到#停止，得到me 从5位置开始遍历字符串S，遇到#停止，得到bell
+876：
+给定一个带有头结点 head 的非空单链表，返回链表的中间结点。
+如果有两个中间结点，则返回第二个中间结点。
+https://leetcode-cn.com/problems/middle-of-the-linked-list/
+利用快慢指针，使用两个指针，一个每次走两步，一个每次走一步，当走得快地走到头了，走得慢的不就刚好走到中位数了么？同样的道理，如果我们要求1/4，4/5，都可以使用类似的方法。
+//  快慢指针，慢指针始终比快指针慢1/2，快指针到终点，慢指针到中间。
+java:
+class Solution {
+    public ListNode middleNode(ListNode head) {
+        ListNode f = head, s = head;
+        while(f != null && f.next != null) {
+            f = f.next.next;
+            s = s.next;
+        }
+        return s;
+    }
+}
