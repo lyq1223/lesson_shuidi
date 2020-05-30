@@ -1,38 +1,28 @@
+// 贪心
+var mincostTickets = function(days, costs) {
+    let dp = new Array(366 + 30).fill(0);
+   
+    // 倒着数日子
+    let n = days.length;
+    let k = n - 1;
+     // 记录必须要出行的最大的日子，和最小的日子
+     let maxDate = days[n - 1];
+     let minDate = days[0];
 
-var hasGroupsSizeX = function(deck) {
-    
-//解法一
-//     let map = new Map();
-//     deck.forEach(element => {
-//         map.set(element,map.has(element) ? map.get(element)+1 : 1)
-//     });
-//     let mapArr = [...map.values()];
-//     let max = 0;
-//     for(let i=0; i< mapArr.length; i++){
-//         max = Math.max(max,mapArr[i])
-//     }
-//     let x = 2;
-//     while (x <= max) {
-//         if(mapArr.every(ele => ele%x == 0)) return true
-//         x++;
-//     }
-//     return false
-
-//     //用最大公约数 辗转相除法
-// };
-// // console.log(hasGroupsSizeX([1,1,2,2,2,2]));
-// console.log(hasGroupsSizeX([1,1,1,2,2,3,3]));
-
-//解法二 最大公约数，辗转相除法
-
-
-//思路一错错错
-// let count = deck.length;
-// let set = new Set(deck);
-// // set.add(deck);
-// let size = set.size;
-// if (count%size === 0){
-//     return true
-// } else {
-//     return false
-// }
+    // 非必要时候，不出行
+    for(let i = maxDate; i >= minDate; i--) {
+        // 倒着比对必须出行的日子
+        if( i === days[k]) {
+            // 决定使用几天的
+            dp[i] = Math.min(dp[i + 1] + costs[0],
+                             dp[i + 7] + costs[1],
+                             dp[i + 30] + costs[2]
+            );
+            k--;
+        } else {
+            dp[i] = dp[i + 1];
+        }        
+    }
+    return dp[minDate];
+};
+console.log(mincostTickets([1,4,6,7,8,20], [2,7,15]));
