@@ -1,22 +1,46 @@
-var maxDepthAfterSplit = function(seq) {
-    let dep = 0;
-    //map() 方法返回一个新数组，不会改变原始数组。同时新数组中的元素为原始数组元素调用函数处理后的值，并按照原始数组元素顺序依次处理元素。
-
-    // 注意：map() 不会对空数组进行检测。所以要先处理。
-    //item 当前元素的值（必选），index当前索引值（可选）
-    //碰到"("深度加一，(深度为奇数就记为1，为偶数就记为0);碰到,")"先记录下深度%2，再将深度减一return 先前记录下来的dep%2
-    //为(深度加一，
-    return seq.split("").map((item,index)=>{
-        if(item === '(') { 
-            ++dep;
-            return dep % 2;
-        } else {  //碰到")"
-            let tmp = dep % 2; //)的深度 肯定跟前面与之对应的(的相同，放入数组中，是为一还是为零而和前面的(的 一致，都为dep % 2
-            --dep;  //降深度
-            return tmp;
+var maxDistance = function(grid) {
+    
+    var land = [];
+    var ocean = [];
+    //1. 找出海洋和陆地
+    //2. 找到每个海洋到陆地的最短距离
+    //3. 找到最短距离中的最大值
+    for(let i = 0; i < grid.length; i++) {
+        for(let j = 0; j < grid.length; j++){
+            if( grid[i][j] === 1) {
+                land.push([i, j]);
+            } else {
+                ocean.push([i, j]);
+            }
         }
-    });
-    // return seq;
+    }
+    var max = -1;
+    // 如果全是海洋或者全是陆地
+    if(land.length == 0 || ocean.length == 0) {
+        return -1;
+    }
+    //每片海洋到陆地的距离中最短的距离
+    for(let i = 0; i < ocean.length; i++) {
+        var min = 9999;
+        for(let j = 0; j < land.length; j++) {
+            //曼哈顿距离 ？？？？
+            let dis = Math.abs(ocean[i][0] - land[j][0]) + Math.abs(ocean[i][1]-land[j][1]);
+            
+            if(dis < min) {
+                min = dis;
+            } 
+            //发现已经有min是1了，那不用再算了，最小的就是1，直接退出
+            if(min == 1) {
+                break;
+            }
+        }
+        if(max < min) {
+            max = min;
+        }
+    }
+    return max
+    // return grid[mi][mj];
 };
-console.log(maxDepthAfterSplit("()(())()"));
-console.log(maxDepthAfterSplit("(()())"));
+
+
+console.log(maxDistance([[1,0,1],[0,0,0],[1,0,1]]));
