@@ -1,28 +1,39 @@
-// 贪心
-var mincostTickets = function(days, costs) {
-    let dp = new Array(366 + 30).fill(0);
-   
-    // 倒着数日子
-    let n = days.length;
-    let k = n - 1;
-     // 记录必须要出行的最大的日子，和最小的日子
-     let maxDate = days[n - 1];
-     let minDate = days[0];
-
-    // 非必要时候，不出行
-    for(let i = maxDate; i >= minDate; i--) {
-        // 倒着比对必须出行的日子
-        if( i === days[k]) {
-            // 决定使用几天的
-            dp[i] = Math.min(dp[i + 1] + costs[0],
-                             dp[i + 7] + costs[1],
-                             dp[i + 30] + costs[2]
-            );
-            k--;
-        } else {
-            dp[i] = dp[i + 1];
-        }        
+var numRookCaptures = function(board) {
+    let count = 0;
+    let x , y ;
+    
+    //记录车的位置
+    for(let i=0;i < 8; i++) {
+        for(let j = 0;j<8;j++){
+            if(board[i][j] === 'R') {
+                x = i;
+                y = j;               
+            }
+        }
     }
-    return dp[minDate];
+    //车的行动方向 西->东(x+1,0) 东->西(x-1,0) 南->北(0,y+1) 北->南(0,y-1)
+    const rx = [1,0,-1,0];
+    const ry = [0,-1,0,1];
+    //按4个方向走
+    for(let i=0;i<4;i++){
+        //死循环，按一个方向走到底
+        for(let j=0; ;j++){
+            //记录车在x轴的移动后的坐标
+            const mx = x + j*rx[i];
+            //y轴
+            const my = y + j*ry[i];
+             
+            //限制车移动的范围,在棋盘范围内，且不碰到象
+            if(mx < 0 || mx >=8 || my < 0 || my >=8 || board[mx][my] === 'B') {
+                break;
+            }
+            if(board[mx][my] === 'p') {
+                count++;
+                break;
+            }
+
+        }
+    }
+     return count;
 };
-console.log(mincostTickets([1,4,6,7,8,20], [2,7,15]));
+console.log(numRookCaptures([[".",".",".",".",".",".",".","."],[".",".",".","p",".",".",".","."],[".",".",".","R",".",".",".","p"],[".",".",".",".",".",".",".","."],[".",".",".",".",".",".",".","."],[".",".",".","p",".",".",".","."],[".",".",".",".",".",".",".","."],[".",".",".",".",".",".",".","."]]));
