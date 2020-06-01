@@ -1,11 +1,55 @@
-1162.地图分析
-https://leetcode-cn.com/problems/as-far-from-land-as-possible/
+- JS/CSS 面试基础  蔡刚宝典， 自己看最重要。
+- 面向顶级就业  阿里/腾讯/头条
+    tree  DOM树/CSS 渲染树  VNODE  虚拟节点  Virtual  DOM
+    JS 原生   基础能力   内功  
 
-你现在手里有一份大小为 N x N 的『地图』（网格） grid，上面的每个『区域』（单元格）都用 0 和 1 标记好了。其中 0 代表海洋，1 代表陆地，你知道距离陆地区域最远的海洋区域是是哪一个吗？请返回该海洋区域到离它最近的陆地区域的距离。
+    = Virtual DOM    babel  AST 抽象语法树 ？
 
-我们这里说的距离是『曼哈顿距离』（ Manhattan Distance）：(x0, y0) 和 (x1, y1) 这两个区域之间的距离是 |x0 - x1| + |y0 - y1| 。
+问题
+<template>
+    <div id="root">
+        <span class="demo">
+            this is a span
+        </span> 
+        <p>DOM</p>
+    </div>
+</template>
+JSON 表达    JS 原生能力 
+html -> js (tree, json )
+描述性  抽象
+别无其他   JSON  表达对一个节点的抽象
+DOM 文本节点nodeType  
+tree 的定义  treeNode 结构都一样
+屏蔽了最底层文本节点的差异
+递归算法，
+{
+    tag: 'div'，     // 标签
+    attrs: {         // 标签上的所有属性   封装
+        id: 'root'
+    }，
+    children: [
+        {
+            tag: 'span',
+            attrs: {
+                className: 'demo'
+            },
+            children: [
+                {
+                    tag: undefined,
+                    text: 'DOM'
+                }
+            ]
+        },
+        {
+            tag: 'p',
+            children: [
+                {
+                    tag: undefined,
+                    text: 'DOM'
+                }
+            ]
+        }
+    ]
+}
 
-如果我们的地图上只有陆地或者海洋，请返回 -1。
-
-题解：
-https://leetcode-cn.com/problems/as-far-from-land-as-possible/solution/di-tu-fen-xi-xian-qiu-mei-ge-hai-yang-dao-lu-di-de/
+只要更强  就一定可以就业更强
