@@ -3,28 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>eval</title>
 </head>
 <body>
-    <!-- 一个网站上会有些什么 图片 -->
-    <img src="https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2473690265,2444464417&fm=26&gp=0.jpg" alt="">
-    <img src="./sw-lifecycle.png" alt="">
     <script>
-        // 使用serviceWorker要完全按照他的流程来
-        // 1.安装它register 安装的是一个js文件
-        // 可以绑定状态变化的事件，我们直接输出一下好了
-        // 都是Promise风格
-        // 安装的时候检测一下先，
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./servicew.js', {scope: './'}) //限制生效范围，当前整个这个网站都能生效
-            .then(function(work) { //是他给我们的对象，有一些事件可以暴露出来供我们使用
-                console.log('sw完成');
-            })
-            .catch(function(err) {
-                console.log('sw失败', err);
-            })
+        // 还跟安全有关
+        // eval不该用 
+        const xmlhttp = new XMLHttpRequest(); //一个请求 //这个是ie 6.0发明的，此时还没有json,所以返回的数据没有json
+        xmlhttp.onreadystatechange = function(event) {
+            // console.log(event);
+            if(xmlhttp.readyState == 4 && xmlhttp.status == 200) { //4就是完全完成了
+                // 是以文本的方式返回的
+                // console.log(event.target.responseText);
+                // 怎么把ajax text => 编程json数组 程序里 红宝书
+                // const data = JSON.parse(event.target.responseText); //就是用于这个场景，es5有的，但不是js语言自带的
+                const data = eval(event.target.responseText); //用eval,
+                // eval是js原生的，一出生就有，可以帮我们把字符串执行成我们的js,把请求来的数据立马执行
+                console.log(data);
+            }
         }
-        // 来到service-worker流程
+        xmlhttp.open("GET", "./post.json", true);  //post.json就代表着服务器把数据输出
+        xmlhttp.send(null);
     </script>
 </body>
 </html>
