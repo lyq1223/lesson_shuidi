@@ -1,48 +1,119 @@
-PWA   progress-web-app
-PWA是一个概念
-为了弥补web端的缺陷
-- 离线化
-断网了拿不到数据，打都打不开
-- 开平页
-react的那个脚手架
-create-react-app做了离线化index.js中用了
-serverWorker
-- 桌面入口（有个icon,点icon就能进入） 配一个manifest.json是一个json配置文件
-- 通知 用一个api （Notification）
-这些都是web端的缺陷
-PWA就是为了解决是些问题
-PWA不是一个具体的技术，是个概念，是实现这些目标
-service-worker--》离线化，断网了也能用
-离线化今天晚上讲
-https://m.weibo.cn/ 微博这个就是有的
-断application中的server-worker中的网，发现还是能上网的，就是离线化
+当在网页上输入
+http://www.baidu.com 发生了什么
+不从网络上讲
+状态码
+会涉及状态码，通过什么样的方式可以解决出来
+304
+为什么输入百度的域名就能直接跳转？
+因为已经全栈启用了https，https更安全
+301永久性跳转
+302是临时性的跳转 忽略头部请求，直接转为get
+304
+307是临时重定向，302跳转有一个bug,如果是get没关系，但是如果有post,会降级为get,307不会从 POST 变为 GET
+做全栈的时候，有api,需要用到post,所以不能用302，尊重methods字段，不忽略。
 
-web-worker
-一个新的线程
-都是和js的主线程是不阻塞的
+- 百度在前端性能优化安全性问题
+## 性能优化和安全
+- 点击一个a标签，不跳转怎么做？
+void_a文件
+用prevent，或者204状态码
 
-service-worker也是，是背后一个线程主要运行的，不和主线程阻塞
+1xx 目前正常，告诉客户端可以继续发送请求或忽略这个响应
+101 Switching Protocol 服务端接受新的http 升级为websocket 是使用
+2xx
+204 成功的，但是没有返回，没有body
+205 服务器成功处理了请求，且没有返回任何内容。但是与204响应不同，返回此状态码的响应要求请求者重置文档视图。该响应主要是被用于接受用户输入后，立即重置表单，以便用户能够轻松地开始另一次输入。
+应用场景：表单不要多次提交
+当前提交成功了，表单的提交，立马跳到另一个页面，避免多次提交。规避重复提交表单。
+206 分段 部分内容 服务器已经成功处理了部分 GET 请求。HTTP 分块下载和断点续传，实现断点续传或者将一个大文档分解为多个下载段同时下载，用于大文件上传
+3xx 要跳转
+301 永久跳转 http->https 域名废弃了，老用户从老域名出来
+302 临时跳转
+304 not modified 内容没有修改
+一般在头部用if-modified-since来表示在客户端已经有了，不用再去服务端取，直接用缓存就行
+last-modified跟if-modified一样，就是没有修改
+1. 检查本地缓存
+2. 去服务器端发送请求
+跟服务器端的max-age一起用
+4xx 客户端有问题用户有问题
+400 Bad Request 这是报文存在错误
+403 请求被拒绝 
+404 
+405 Method Not Allowed
+408 Request Timeout
+409 多个请求冲突
+413 请求体数据过大
+429 客户端发送太多的请求
+431 请求头的字段内容太大
+5xx
+500 Internal Server Error 服务器端出错 但是不知道哪里错了
+501 Not Implemented
+502 Bad Gateway
+503 服务现在不可用 Bad Gateway
 
-要先安装 -》激活（activited）-》idle
 
-还有一个技术，也是在application
-Cache里面，cache Storage是实现离线化的另一个
-是个缓存的一个空间，就是把内容放在里面
-缓存的名字（什么什么空间） + 地址
 
-离线的关键：
-service worker + Cache Storage
+## 重绘，重排
+performance，点击刷新
 
-index.html
+## js的优化，我们可以做什么？
+```js
+[
+    {
+      "title": "JavaScript eval() 函数的用法以及危害",
+      "id": 1234567890
+    },
+    {
+      "title": "php eval函数用法 PHP中eval()函数小技巧",
+      "id": 2345234212
+    }
+]
+```
 
-304是http缓存 
-还有一个更厉害的缓存service-worker
-service-worker + cache Storage : from ServiveWorker
-一级缓存 二级缓存 三级缓存
-意思是他们的优先级
-service-worker + cache storage是位于http缓存前面的，浏览器最先到达ServiceWorker这层的，然后再去http那层，然后才是后端
-缓存无处不在
-brow -> SW -> http->后端
+eval with都不要用
+eval可以把任何的js文本运行起来（什么代码都会被作为json执行起来），就像一个黑科技，他特别耗性能，所以不要用，而且有安全问题，会造成xss攻击(跨站脚本漏洞)
+cookie中可能有用户的身份信息，如果遭受了eval js 用document.cookie能拿到，把我们的
+用jsonp跨域访问，访问黑客的url，发给他自己的服务器，然后就能用这个cookie了,代表用户发送请求
+安全问题：
+xss 是个文本，里面存的是js代码
 
-service-work + cache-storage :  from ServiceWorker
-http 缓存：200  from-disk-cache from-memo-cache
+解决方案是什么？
+前后端转义，httpOnly, CSP
+可以为网站的cookie加一个httpOnly属性
+只有在http服务中 使用
+前端不能修改它
+- 用户输入，前后端转义，encodeURIComponent 如果加了script标签什么的都会被转码
+
+2. 传统的，加载的顺序
+js文件要从下载开始放在尾部，因为会有阻塞
+head放css
+js文件放最下面，因为js文件会阻塞，为什么？
+在js比较早的时候，在script后面加一个defer,script标签就不会阻塞，但是现在不用这个了
+为什么要让他阻塞？
+下载，放在body尾部 阻塞
+- 为什么会阻塞，为什么要设计成阻塞的？
+因为js中式动态的代码，有可能要动态增操作DOM，script标签里面可以驱动很多
+要等它下载并且执行完毕之后才可以往下，
+css放前面，因为想尽快看到页面，所以要尽快把文件下载下来，然后渲染
+
+css中有一个技巧叫做雪碧图，现在还有必要么？
+什么是css雪碧图？
+是网页性能的一个使用，放一张图上，好处：只发送一次http请求，可以降低网络传输的性能
+缺点：第一次下载的时候有点慢，因为文件比较大，每次要分割 文件下载完了才能用，要确认，
+底层：
+为什么不用了？
+不好维护，css难写，要写backage-position
+
+直接用阿里的iconfont了，为什么这个不会影响性能？
+为什么背景图直接img src=""
+1. 可以用到cdn缓存，静态 会部署到缓存上，能直接用，只要有一个人访问到了，其他人就能共享
+阿里会在各个厂商尽量部署cdn集群， 静态服务器，
+域名解析是递归查找的，有缓存就可以直接用了
+
+img src=""增加了http请求， 这里面没有http请求，直接被webpack打包成了base64，是js，
+如果有请求，那就是http协议更新了，那个版本把雪碧图干掉了
+http有0.9 1.0 1.1 2.0 3.0
+小册：浏览器工作原理与实践
+2.0的时候，就不用雪碧图了，因为都可以并行了
+js动画优化
+request
