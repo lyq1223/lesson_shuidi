@@ -1,25 +1,40 @@
-// 定义新的接口
-//怎么让node快速支持import?
-// babel？使用babel预处理
-// dev
+const Koa = require('koa');
+const { ApolloServer, gql } = require('apollo-server-koa'); //用来跟前端连接起来
+// 前端要调用后端，要跨域请求
+const cors = require('@koa/cors'); //要安装
+const { readFile } = require('./utils');
 
-import express from 'express';
-import graphqlHTTP from 'express-graphql'; //是一个中间件
-import schema from './schema'; //模型定义文件，交给graphqlHTTP
+// 接住前端的gql查询，不再是restful
+// 定义一个查询 怎么在mock中拿出来 约定一下类型是什么 不能为空，就像我们的scheme
+const typeDefs = gql`
+type: TodoItem {
+    id: ID
+    content: String
+    checked: Boolean
+}
+type Query {
+    TodoList: [TodoItem!]
+}
+`
 
-const app = express();
+const resolves = {
+    Query: {
+        TodoList: async () => {
+            const data = await readFile('./mock/index.json');
+            const todoList = JSON.parse(data); //变成json
+            return todoList;
+        }
+    }
+}
+// 由前端来调用
+// apollo graphql的封装
+const server = new ApolloServer({
+    // schema
+    typeDefs, //query
+    resolves //提供值
+})
+const app = new Koa();
 
-// 数据playground
-// 数据一定是从数据库来的，数据都是通过req res然后用中间件提交回去，当有一个req -》 graphQL -> database
-// 启动一个praphql服务，一个graphql的
-// 可以给我们的接口定义schema 在这里定义会提供哪些接口，这些接口怎么样可以被访问
-// 为这个新的api接口语言提供一个graphqlHTTP服务
-app.use('/graphql', graphqlHTTP({   //提供一个模拟数据访问的地方//相当于访问这个路经就打开打开一个服务
-    // 在前端也有像mongodb一样的schema，严格约定接口  graphql是新的接口定义接口 前后端都能运行
-    // schema中定义会提供哪些接口
-    schema,
-    graphiql:true //把grapgQL插入后台 //会提供一个playground可以测试graphQL接口写的怎么样
-}))
 
-app.listen(8080);
-// nodemon index.js
+app.listen(3001);
+
