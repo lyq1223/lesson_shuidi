@@ -1,38 +1,25 @@
-let p = Promise.resolve(1);
-let p2 = new Promise((resolve) =>{
-    setTimeout(()=>{
-        resolve(234)
-    },2000)
-})
-//async + await 就转换成这样了
-function* test() {
-    let a = yield p; //要保证a的值是p resolve之后的值 通过then获得
-    console.log('a', a);
-    let b = yield p2;
-    console.log('b', b);
-}
-//目的是1.要执行generator，2.而且要保证顺序
-//要有一个方法 要保证上面两个能实现
-function asyncTogenerate(gen) {
-    let g = gen() //要先拿到这个对象，才能执行generator, 一步步调用next
-    //递归的方式执行
-    function step(value) {
-        let info = g.next(value); //还要给next赋值，保证这次的执行是上次的resolve的值 //就是这个"然后再交给下一个g.next 处理yield的返回值问题"
-        //是否为true
-        if(info.done) { //为true就终止
-            return;
-        } else {
-            //把yield后面的东西（info.value)直接resolve
-            //实现那个思想 //then后的东西会被res拿到
-            //Promise包一层，然后再加一个then方法，then里面的方法，就是用来调用下一个yield方法（g.next)
-            Promise.resolve(info.value).then((res)=>{
-                //调用下一个yield的代码 只需要直接进入下一个递归就行，然是还要处理顺序问题
-                //每个都要Promise.resolve包一层，包的是下一个yield，  resolve出去的东西都会被then的回调拿到
-                //第一次 可以拿到p resolve 后的值：1
-                step(res); //这里能拿到一个value 然后再交给下一个g.next 处理yield的返回值问题
-            })
-        }
-    }
-    step(); //启动 //第一次递归调用的时候不用赋值，之后的才要
-}
-asyncTogenerate(test);
+// 定义新的接口
+//怎么让node快速支持import?
+// babel？使用babel预处理
+// dev
+
+import express from 'express';
+import graphqlHTTP from 'express-graphql'; //是一个中间件
+import schema from './schema'; //模型定义文件，交给graphqlHTTP
+
+const app = express();
+
+// 数据playground
+// 数据一定是从数据库来的，数据都是通过req res然后用中间件提交回去，当有一个req -》 graphQL -> database
+// 启动一个praphql服务，一个graphql的
+// 可以给我们的接口定义schema 在这里定义会提供哪些接口，这些接口怎么样可以被访问
+// 为这个新的api接口语言提供一个graphqlHTTP服务
+app.use('/graphql', graphqlHTTP({   //提供一个模拟数据访问的地方//相当于访问这个路经就打开打开一个服务
+    // 在前端也有像mongodb一样的schema，严格约定接口  graphql是新的接口定义接口 前后端都能运行
+    // schema中定义会提供哪些接口
+    schema,
+    graphiql:true //把grapgQL插入后台 //会提供一个playground可以测试graphQL接口写的怎么样
+}))
+
+app.listen(8080);
+// nodemon index.js
