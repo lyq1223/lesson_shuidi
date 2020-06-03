@@ -1,119 +1,127 @@
-当在网页上输入
-http://www.baidu.com 发生了什么
-不从网络上讲
-状态码
-会涉及状态码，通过什么样的方式可以解决出来
-304
-为什么输入百度的域名就能直接跳转？
-因为已经全栈启用了https，https更安全
-301永久性跳转
-302是临时性的跳转 忽略头部请求，直接转为get
-304
-307是临时重定向，302跳转有一个bug,如果是get没关系，但是如果有post,会降级为get,307不会从 POST 变为 GET
-做全栈的时候，有api,需要用到post,所以不能用302，尊重methods字段，不忽略。
+- 简历，技能点描述，从词，变成话语,再变成花语
 
-- 百度在前端性能优化安全性问题
-## 性能优化和安全
-- 点击一个a标签，不跳转怎么做？
-void_a文件
-用prevent，或者204状态码
+## vue + graphQl
+### RESTful
+前后端联调的时候url的设计很重要
+文章系统posts 查看某一篇文章/posts/show/1 这个url设计的科学吗？
+不科学 /posts/1 这个是合理的
+因为restful是后端暴露资源的解决方案，多年一只受追捧,一切皆是资源
+1. http 动词
+GET/POST/DELETE/PATCH/PUT...
+2. 每一个url代表一种资源，网站是向外暴露资源的，所以才会有/posts/1
+之前的url累赘的地方，就是不够简洁，之前的体现的是MVVM的特点
 
-1xx 目前正常，告诉客户端可以继续发送请求或忽略这个响应
-101 Switching Protocol 服务端接受新的http 升级为websocket 是使用
-2xx
-204 成功的，但是没有返回，没有body
-205 服务器成功处理了请求，且没有返回任何内容。但是与204响应不同，返回此状态码的响应要求请求者重置文档视图。该响应主要是被用于接受用户输入后，立即重置表单，以便用户能够轻松地开始另一次输入。
-应用场景：表单不要多次提交
-当前提交成功了，表单的提交，立马跳到另一个页面，避免多次提交。规避重复提交表单。
-206 分段 部分内容 服务器已经成功处理了部分 GET 请求。HTTP 分块下载和断点续传，实现断点续传或者将一个大文档分解为多个下载段同时下载，用于大文件上传
-3xx 要跳转
-301 永久跳转 http->https 域名废弃了，老用户从老域名出来
-302 临时跳转
-304 not modified 内容没有修改
-一般在头部用if-modified-since来表示在客户端已经有了，不用再去服务端取，直接用缓存就行
-last-modified跟if-modified一样，就是没有修改
-1. 检查本地缓存
-2. 去服务器端发送请求
-跟服务器端的max-age一起用
-4xx 客户端有问题用户有问题
-400 Bad Request 这是报文存在错误
-403 请求被拒绝 
-404 
-405 Method Not Allowed
-408 Request Timeout
-409 多个请求冲突
-413 请求体数据过大
-429 客户端发送太多的请求
-431 请求头的字段内容太大
-5xx
-500 Internal Server Error 服务器端出错 但是不知道哪里错了
-501 Not Implemented
-502 Bad Gateway
-503 服务现在不可用 Bad Gateway
+每一个url代表资源，url中不能有动词
+设计一个好的url，里面不能有动词，动词仅限http动词 get代表的就是show
+资源是名词，/posts是名词
+
+### 设计一个url
+网上汇款，从账户1向账户2汇款500元
+阮一峰：http://www.ruanyifeng.com/blog/2011/09/restful.html
+错误的URI是：
+POST /accounts/1/transfer/500/to/2
+正确的写法是把动词transfer改成名词transaction，资源不能是动词，但是可以是一种服务：
+
+　　POST /transaction HTTP/1.1
+　　Host: 127.0.0.1
+　　
+　　from=1&to=2&amount=500.00
+/transaction 交易 他足够大 可以作为独立模块website 
+http1.1支持cookies 提供缓存，添加复用
+POST 状态转化 这是有意义的http动词
+from=1&to=2&amout=500.00 res body
+
+3. 客户端通过http动词，对服务器资源进行操作，实现表现层状态转化，所以叫rest 
+是什么资源，进行了什么资源的状态转化
+
+资源是什么？发生了什么改变
 
 
+- 不过在近几年来，restful被前端新的理念革命了-》grapgQL 
+他可以让前端更好的使用及定义数据接口，达到什么效果
+测试驱动开发 让代码更严谨，swagger，可以自动生成api文档，graphQL Apollo在用
+让前端刚好的使用并定义数据接口，做到不浪费数据，数据格式更加严谨
 
-## 重绘，重排
-performance，点击刷新
+以vue视角
+vuex -> api -> mockjs -> server 这是传统的restful能表现的
+优化一下：
+vuex -> praphQL -> mockjs -> server 他定义的api可以让接口更加完美
+因为restful主要用到的是谓语动词所以比较受后端的影响控制大，
+前后端分开，后端不会把所有数据都说，就会有些数据冗余
+graphQL让前端对数据接口有了更大的话语权，
+数据流驱动管理应用开发，用graphQL设计api
 
-## js的优化，我们可以做什么？
-```js
-[
-    {
-      "title": "JavaScript eval() 函数的用法以及危害",
-      "id": 1234567890
-    },
-    {
-      "title": "php eval函数用法 PHP中eval()函数小技巧",
-      "id": 2345234212
+初始化
+npm init -y
+安装
+yarn add express json-server
+yarn add express-graphql 中间件
+新建index.js
+定义新的接口
+
+互联网暴露资源有了一个定义 + 资源有状态的转化，用谓语动词
+
+怎么让node快速支持import?
+"dev": "nodemon index.js --exec babel-node --presets env,stage-0"
+将babel作为node的一个转译
+指定预处理 env stag-0(第一阶段的补丁)
+安装 
+yarn add babel-cli babel-core babel-preset-env babel-preset-env-0
+yarn add babel-cli babel-core babel-preset-env babel-preset-stage-0
+
+npm run dev
+### graphQL + vue让项目跑起来
+安装graghql
+yarn add graphql
+
+npm run dev运行一下 到localhost:8080/graghql
+
+QL 
+queryLanguage 查询语言 query
+query getGreeting { 
+  //getGreeting位于schema文件的new GrapgQLSchema //我们没有这个getGreeting,这里的名字随意
+  greeting //这个是field中有的
+}
+会出来
+{
+  "data": {
+    "greeting": "hello ~"
+  }
+}
+用jsonserver访问文件 利用restful提供对资源的访问，只要给一个json文件就能访问其中的数据，通过restful。
+添加一个脚本
+"json-server": "./node_modules/.bin/json-server --watch db.json --port 3300" //跨域提供服务
+(用json-server打开db.json)
+watch：监听
+然后再启动一个接口
+npm run json-server  快速访问数据，就不走mongodb了
+给接口加上schema,加类型定义
+schema.js
+
+传统的前后端接口开发，虽然有restful，但是还是有些不需要的数据没过滤掉
+前端希望对请求的数据严格控制，通过schema 用graphql过滤掉不必要的数据
+
+query getPosts {
+  posts{
+      id,
+      title,
+      content
     }
-]
-```
-
-eval with都不要用
-eval可以把任何的js文本运行起来（什么代码都会被作为json执行起来），就像一个黑科技，他特别耗性能，所以不要用，而且有安全问题，会造成xss攻击(跨站脚本漏洞)
-cookie中可能有用户的身份信息，如果遭受了eval js 用document.cookie能拿到，把我们的
-用jsonp跨域访问，访问黑客的url，发给他自己的服务器，然后就能用这个cookie了,代表用户发送请求
-安全问题：
-xss 是个文本，里面存的是js代码
-
-解决方案是什么？
-前后端转义，httpOnly, CSP
-可以为网站的cookie加一个httpOnly属性
-只有在http服务中 使用
-前端不能修改它
-- 用户输入，前后端转义，encodeURIComponent 如果加了script标签什么的都会被转码
-
-2. 传统的，加载的顺序
-js文件要从下载开始放在尾部，因为会有阻塞
-head放css
-js文件放最下面，因为js文件会阻塞，为什么？
-在js比较早的时候，在script后面加一个defer,script标签就不会阻塞，但是现在不用这个了
-为什么要让他阻塞？
-下载，放在body尾部 阻塞
-- 为什么会阻塞，为什么要设计成阻塞的？
-因为js中式动态的代码，有可能要动态增操作DOM，script标签里面可以驱动很多
-要等它下载并且执行完毕之后才可以往下，
-css放前面，因为想尽快看到页面，所以要尽快把文件下载下来，然后渲染
-
-css中有一个技巧叫做雪碧图，现在还有必要么？
-什么是css雪碧图？
-是网页性能的一个使用，放一张图上，好处：只发送一次http请求，可以降低网络传输的性能
-缺点：第一次下载的时候有点慢，因为文件比较大，每次要分割 文件下载完了才能用，要确认，
-底层：
-为什么不用了？
-不好维护，css难写，要写backage-position
-
-直接用阿里的iconfont了，为什么这个不会影响性能？
-为什么背景图直接img src=""
-1. 可以用到cdn缓存，静态 会部署到缓存上，能直接用，只要有一个人访问到了，其他人就能共享
-阿里会在各个厂商尽量部署cdn集群， 静态服务器，
-域名解析是递归查找的，有缓存就可以直接用了
-
-img src=""增加了http请求， 这里面没有http请求，直接被webpack打包成了base64，是js，
-如果有请求，那就是http协议更新了，那个版本把雪碧图干掉了
-http有0.9 1.0 1.1 2.0 3.0
-小册：浏览器工作原理与实践
-2.0的时候，就不用雪碧图了，因为都可以并行了
-js动画优化
-request
+}
+取出来了：
+{
+  "data": {
+    "posts": [
+      {
+        "id": "1",
+        "title": "将进酒君不见",
+        "content": "主人何为言少钱,径须沽取对君酌"
+      },
+      {
+        "id": "2",
+        "title": "长恨歌",
+        "content": "蜀山水碧蜀山青,圣主朝朝暮暮情"
+      }
+    ]
+  }
+}
