@@ -1,29 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eval</title>
-</head>
-<body>
-    <script>
-        // 还跟安全有关
-        // eval不该用 
-        const xmlhttp = new XMLHttpRequest(); //一个请求 //这个是ie 6.0发明的，此时还没有json,所以返回的数据没有json
-        xmlhttp.onreadystatechange = function(event) {
-            // console.log(event);
-            if(xmlhttp.readyState == 4 && xmlhttp.status == 200) { //4就是完全完成了
-                // 是以文本的方式返回的
-                // console.log(event.target.responseText);
-                // 怎么把ajax text => 编程json数组 程序里 红宝书
-                // const data = JSON.parse(event.target.responseText); //就是用于这个场景，es5有的，但不是js语言自带的
-                const data = eval(event.target.responseText); //用eval,
-                // eval是js原生的，一出生就有，可以帮我们把字符串执行成我们的js,把请求来的数据立马执行
-                console.log(data);
-            }
-        }
-        xmlhttp.open("GET", "./post.json", true);  //post.json就代表着服务器把数据输出
-        xmlhttp.send(null);
-    </script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>React App</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
 </html>
