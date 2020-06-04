@@ -1,39 +1,19 @@
 package main
 
-import (
-	"fmt"
-	"math"
-)
+import "fmt"
 
-func surfaceArea(grid [][]int) int {
-
-	surfaceAreaCount := 0
-	for i := 0; i < len(grid); i++ {
-		for j := 0; j < len(grid); j++ {
-			count := grid[i][j]
-
-			if count == 0 {
-				continue
-			}
-			surfaceAreaCount += 2 + 4*count
-
-			if i-1 >= 0 {
-				surfaceAreaCount -= int(math.Min(float64(count), float64(grid[i-1][j])))
-			}
-			if i+1 < len(grid) {
-				surfaceAreaCount -= int(math.Min(float64(count), float64(grid[i+1][j])))
-			}
-			if j-1 >= 0 {
-				surfaceAreaCount -= int(math.Min(float64(count), float64(grid[i][j-1])))
-			}
-			if j+1 < len(grid) {
-				surfaceAreaCount -= int(math.Min(float64(count), float64(grid[i][j+1])))
-			}
+func rotate(matrix [][]int)  {
+	for i:=0; i < len(matrix); i++ {
+		for j :=i; j <len(matrix[i]); j++ {
+			([matrix[i][j], matrix[j][i]] = [matrix[j][i],matrix[i][j]])
 		}
 	}
-	return surfaceAreaCount
+	N :=len(matrix)
+	for y := 0; y < (N / 2); y++ {
+		matrix[y], matrix[N-1-y] = matrix[N-1-y], matrix[y]
+	}
 }
 
 func main() {
-	fmt.Println(surfaceArea([][]int{{1, 2}, {3, 4}})) //[[1,2],[3,4]]
+	fmt.Println(rotate([][]int{{1,2,3}, {4,5,6}, {7,8,9}}))
 }
