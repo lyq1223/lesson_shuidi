@@ -1,50 +1,67 @@
-function TreeNode(val) {
-    this.val = val;
-    this.left = this.right = null;
+let htmlStr = `<html>
+ <head></head>
+ <body>
+    <div></div>
+ </body>
+</html>
+`;
+// 分词
+// DOM树 节点有 类型
+// { type: element, tagName: 'html', tag: 'startTag'}
+// { type: element, tagName: 'html', tag: 'endTag'}
+let currentToken = null;
+function parse(string) {
+  let state = start;
+  for (let c of string) {
+    // \n
+    state = state(c);
+  }
 }
-const n1 = new TreeNode(1);
-const n2 = new TreeNode(2);
-const n3 = new TreeNode(3);
-// const n4 = new TreeNode(null);
-const n5 = new TreeNode(4);
-n1.left = n2;
-n1.right = n3;
-// n2.left = n4;
-n2.right = n5;
-
-// bfs
-// var rightSideView = function(root) {
-//     let res = [];
-//     let que = [root];
-//     while(que.length) {
-//         let size = que.length;
-//         while(size) {
-//             let lastnode = que.shift();
-//             if(size === 1) res.push(lastnode.val);
-//             if(lastnode.left) que.push(lastnode.left);
-//             if(lastnode.right) que.push(lastnode.right);
-//             size--; //这个时候，就不能把减减放在while，要在判断完if之后再减
-//         }
-//     }
-//     return res;
-// }
-// console.log(rightSideView(n1));
-
-// dfs
-var rightSideView = function(root) {
-    if(!root) return []
-    let arr = []
-    dfs(root, 0, arr)
-    return arr
-};
-function dfs(root, step, res) {
-    if(root) {
-        // 当数组长度等于当前 深度 时, 把当前的值加入数组
-        if(res.length === step) {
-            res.push(root.val);
-        }
-        // console.log(step, '-------', res)
-        dfs(root.right, step + 1, res) // 先从右边开始, 当右边没了, 再轮到左边
-        dfs(root.left, step + 1, res)
+parse(htmlStr);
+function start(c) {
+  if (c === '<') {
+    return tagOpen;
+  } else {
+    return start;
+  }
+}
+function tagOpen(c) {
+  if (c === '/') {
+    // </h 结束标签
+    return endTagOpen
+  } else if (c.match(/^[a-zA-Z]$/)) {
+    // <h  开始标签 去拼接 
+    currentToken = {
+      type: 'element',
+      tag: 'startTag',
+      tagName: c
     }
+    return tagName;
+  }
+}
+function tagName(c) {
+  if (c.match(/^[a-zA-Z]$/)) {
+    currentToken.tagName += c;
+    // 
+    return tagName;
+    // 什么时候拼接完？？
+  } else if (c === '>') {
+    // 提交 当前 token
+    emit(currentToken);
+    return start;
+  }
+}
+function endTagOpen(c) {
+  if (c.match(/^[a-zA-Z]$/)) {
+    currentToken = {
+      type: 'element',
+      tag: 'endTag',
+      tagName: c
+    }
+    // 也要拼接
+    return tagName;
+  }
+}
+function emit(token) {
+  console.log(token);
 }
